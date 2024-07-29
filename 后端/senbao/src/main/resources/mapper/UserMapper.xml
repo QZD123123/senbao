@@ -22,12 +22,19 @@
     </sql>
 
 
-    <select id="getAllUser" resultType="com.senbao.pojo.User">
-        select * from user
-    </select>
+
 
     <select id="findByPhone" resultType="com.senbao.pojo.User">
         select * from user where phone = #{phone}
+    </select>
+
+    <select id="selectUserCount" resultType="java.lang.Long">
+        select count(*) from user
+    </select>
+
+    <select id="selectUserPage" resultType="com.senbao.pojo.User">
+        SELECT * FROM `user`
+                          LIMIT #{page}, #{pageSize};
     </select>
 
 

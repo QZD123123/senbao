@@ -12,7 +12,11 @@ import com.senbao.utils.Result;
 import com.senbao.utils.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +31,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Autowired
     private JwtHelper jwtHelper;
 
-    @Override
-    public Result getAllUser() {
-        List<User> allUser = userMapper.getAllUser();
-
-        return Result.ok(allUser);
-    }
 
     @Override
     public Result login(User user) {
@@ -64,8 +62,85 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     }
 
+    @Override
+    public Result register(User user) {
 
+        Map data = new LinkedHashMap();
 
+        User dbUser = userMapper.findByPhone(user.getPhone());
+        if (dbUser == null) {
+            int rows = userMapper.insert(user);
+            System.out.println("rows = " + rows);
+            System.out.println("user = " + user);
+            data.put("msg","注册成功");
+        }else {
+            data.put("msg","账号已存在");
+        }
+        return Result.ok(data);
+    }
+
+    @Override
+    public Result userPageSelect(Integer page, Integer pageSize) {
+        //获取员工总数
+        Long count = userMapper.selectUserCount();
+
+        //分页查询订单列表
+        List<User> records = userMapper.selectUserPage((page - 1) * pageSize, pageSize);
+
+//        ArrayList<User> list = new ArrayList<>();
+
+        Map data = new LinkedHashMap();
+        data.put("tip","成功获取第"+page+"页，共"+pageSize+"条数据");
+        data.put("page",page);
+        data.put("count",pageSize);
+        data.put("pageTotal",(int)Math.ceil(count/pageSize));
+        data.put("userTotal",count);
+        data.put("userList",records);
+
+        return Result.ok(data);
+    }
+
+    @Override
+    public Result selectUserById(Integer id) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getId,id);
+        User user = userMapper.selectOne(queryWrapper);
+
+        Map data = new LinkedHashMap();
+        data.put("tip","成功获取指定用户");
+        data.put("user",user);
+
+        return Result.ok(data);
+    }
+
+    @Override
+    public Result updateUserById(Integer id, User user) {
+        user.setId(id);
+        userMapper.updateById(user);
+
+        Map data = new LinkedHashMap();
+        data.put("tip","成功更新用户信息");
+
+        return Result.ok(data);
+    }
+
+    @Override
+    public Result deleteUser(Integer id) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getId,id);
+        int i = userMapper.delete(queryWrapper);
+
+        Map data = new LinkedHashMap();
+
+        if (i==0) {
+            data.put("tip","删除用户失败");
+        }
+        if(i>0){
+            System.out.println("删除用户"+id+"成功");
+            data.put("tip","成功删除用户");
+        }
+        return Result.ok(data);
+    }
 
 
 }

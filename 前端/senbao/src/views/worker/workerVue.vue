@@ -90,7 +90,7 @@ const WorkerData = ref([
     },
 ])
 
-import {WorkerListService} from '@/api/worker.js'
+import {WorkerListService} from '@/stores/modules/worker.js'
 
 const WorkerList = async () => {
     let result = await WorkerListService();

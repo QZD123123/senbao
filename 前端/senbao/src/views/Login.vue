@@ -6,7 +6,7 @@ import { ElMessage } from 'element-plus'
 const isRegister = ref(false)
 //定义数据模型
 const registerData = ref({
-    username: '',
+    phone: '',
     password: '',
     rePassword: ''
 })
@@ -24,9 +24,9 @@ const checkRePassword = (rule, value, callback) => {
 
 //定义表单校验规则
 const rules = {
-    username: [
+    phone: [
         { required: true, message: '请输入用户名', trigger: 'blur' },
-        { min: 5, max: 16, message: '请输入5-16个字符', trigger: 'blur' }
+        { min: 11, max: 11, message: '请输入11位数的手机号', trigger: 'blur' }
     ],
     password: [
         { required: true, message: '请输入密码', trigger: 'blur' },
@@ -38,7 +38,7 @@ const rules = {
 }
 
 //调用后台接口完成注册
-import { userRegisterService, userLoginService } from '@/api/user.js'
+import { userRegisterService, userLoginService } from '@/stores/modules/worker.js'
 const register = async () => {
     let result = await userRegisterService(registerData.value);
     // if (result.code === 0) {
@@ -81,7 +81,7 @@ const login = async () => {
 //定义函数，清空数据模型的数据
 const clearRegisterData = () => {
     registerData.value = {
-        username: '',
+        phone: '',
         password: '',
         rePassword: ''
     }
@@ -97,8 +97,8 @@ const clearRegisterData = () => {
                 <el-form-item>
                     <h1>注册</h1>
                 </el-form-item>
-                <el-form-item prop="username">
-                    <el-input :prefix-icon="User" placeholder="请输入用户名" v-model="registerData.username"></el-input>
+                <el-form-item prop="phone">
+                    <el-input :prefix-icon="User" placeholder="请输入手机号" v-model="registerData.phone"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码"
@@ -125,8 +125,8 @@ const clearRegisterData = () => {
                 <el-form-item>
                     <h1>登录</h1>
                 </el-form-item>
-                <el-form-item prop="username">
-                    <el-input :prefix-icon="User" placeholder="请输入用户名" v-model="registerData.username"></el-input>
+                <el-form-item prop="phone">
+                    <el-input :prefix-icon="User" placeholder="请输入手机号" v-model="registerData.phone"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input name="password" :prefix-icon="Lock" type="password" placeholder="请输入密码"

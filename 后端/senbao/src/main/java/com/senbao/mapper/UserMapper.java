@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface UserMapper extends BaseMapper<User> {
 
-    List<User> getAllUser();
-
 
     User findByPhone(@Param("phone") String phone);
+
+
+    Long selectUserCount();
+
+    List<User> selectUserPage(@Param("page") Integer page, @Param("pageSize") Integer pageSize);
 }

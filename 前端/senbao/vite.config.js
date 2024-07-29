@@ -34,7 +34,7 @@ export default defineConfig({
       '/api': { //获取路径中包含了/api的请求
         target: 'http://localhost:3000', //后台服务所在的源
         changeOrigin: true,
-        rewrite:(path)=>path.replace(/^\/api/,'')//api替换为''
+        rewrite:(path)=>path.replace(/^\/api/,'/api')//api替换为''
       }
     }
   }

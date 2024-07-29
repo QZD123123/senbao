@@ -1,5 +1,6 @@
 //导入request.js请求工具
-import request from '@/utils/request.js'
+// import request from '@/utils/request.js'
+import api from '@/api/api.js'
 
 //提供调用注册接口的函数
 export const userRegisterService = (registerData) => {
@@ -20,12 +21,12 @@ export const userLoginService = (loginData) => {
     return request.post('/auth/login', params);
 }
 
-//获取用户详细信息
-export const userInfoService = ()=>{
-    return request.get('/user');
+
+
+
+
+//员工列表查询
+export const WorkerListService = () => {
+    return request.get('/user')
 }
 
-//修改个人信息
-export const userInfoUpdateService = (userInfoData) =>{
-    return request.put('/user/update',userInfoData)
-}

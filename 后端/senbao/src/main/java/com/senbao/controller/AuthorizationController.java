@@ -16,8 +16,15 @@ public class AuthorizationController {
 
     @PostMapping("login")
     public Result login(@RequestBody User user){
-        System.out.println("result = " + user);
+        System.out.println("user = " + user);
         Result result = userService.login(user);
+        return result;
+    }
+
+    @PostMapping("register")
+    public Result register(@RequestBody User user){
+        System.out.println("user = " + user);
+        Result result = userService.register(user);
         return result;
     }
 
