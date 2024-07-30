@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+}
+
+#app {
+    margin: 0 auto;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    max-width: 2560px;
+}
+
+::-webkit-scrollbar {
+    width: 12px;  /* 设置滚动条的宽度 */
+    height: 12px; /* 设置水平滚动条的高度 */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 设置滚动条轨道的背景色 */
+    border-radius: 10px; /* 设置滚动条轨道的圆角 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* 设置滚动条滑块的背景色 */
+    border-radius: 10px; /* 设置滚动条滑块的圆角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 设置滚动条滑块在悬停时的背景色 */
+}
