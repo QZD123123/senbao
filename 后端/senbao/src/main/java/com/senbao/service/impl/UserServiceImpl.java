@@ -72,9 +72,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             int rows = userMapper.insert(user);
             System.out.println("rows = " + rows);
             System.out.println("user = " + user);
-            data.put("msg","注册成功");
+            data.put("tip","注册成功");
         }else {
-            data.put("msg","账号已存在");
+            data.put("tip","账号已存在");
+            return Result.build(data,ResultCodeEnum.requested_resource_no_modified);
         }
         return Result.ok(data);
     }
@@ -115,6 +116,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Result updateUserById(Integer id, User user) {
+
         user.setId(id);
         userMapper.updateById(user);
 
@@ -141,6 +143,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return Result.ok(data);
     }
+
+
 
 
 }

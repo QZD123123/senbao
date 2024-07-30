@@ -14,15 +14,12 @@
         <result property="salary" column="salary" jdbcType="VARCHAR"/>
         <result property="address" column="address" jdbcType="VARCHAR"/>
         <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
-        <result property="joined_date" column="joined_date" jdbcType="VARCHAR"/>
+        <result property="joinedDate" column="joined_date" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_list">
         id,username,password,phone,role,salary,address,avatar,joined_date
     </sql>
-
-
-
 
     <select id="findByPhone" resultType="com.senbao.pojo.User">
         select * from user where phone = #{phone}
@@ -36,6 +33,7 @@
         SELECT * FROM `user`
                           LIMIT #{page}, #{pageSize};
     </select>
+
 
 
 </mapper>

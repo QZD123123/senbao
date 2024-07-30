@@ -21,18 +21,24 @@ import {
 //添加请求拦截器
 instance.interceptors.request.use(
     (config) => {
+
+        // 不对特定路径进行 token 验证
+        if (config.url === '/auth/login') {
+            return config; // 直接返回，不添加 token
+        }
         //请求前的回调
         //添加token
         const tokenStore = useTokenStore();
         //判断有无token
         if (tokenStore.token) {
             config.headers.Authorization = tokenStore.token
+            console.log('Token:', config.headers.Authorization); // 输出 Token 到控制台
         }
         return config;
     },
     (err) => {
         //请求错误的回调
-        Promise.reject(err)
+        return Promise.reject(err)
     }
 )
 
@@ -42,13 +48,13 @@ import router from '@/router';
 instance.interceptors.response.use(
     result => {
         //判断业务状态码
-        if (result.data.code === 0) {
+        if (result.data.code === 200) {
             return result.data;
         }
 
         //操作失败
         // alert(result.data.msg ? result.data.msg : '服务异常')
-        ElMessage.error(result.data.msg ? result.data.msg : '服务异常')
+        ElMessage.error(result.data.msg ? result.data.msg : '服务异常1')
         //异步操作的状态转换为失败
         return Promise.reject(result.data)
     },
@@ -58,7 +64,7 @@ instance.interceptors.response.use(
             ElMessage.error('请先登录')
             router.push('/login')
         }else{
-            ElMessage.error('服务异常')
+            ElMessage.error('服务异常2')
         }
         return Promise.reject(err); //异步的状态转化成失败的状态
     }

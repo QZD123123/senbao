@@ -15,4 +15,5 @@ public interface UserMapper extends BaseMapper<User> {
     Long selectUserCount();
 
     List<User> selectUserPage(@Param("page") Integer page, @Param("pageSize") Integer pageSize);
+
 }

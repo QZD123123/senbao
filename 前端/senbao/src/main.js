@@ -13,7 +13,7 @@ import {createPinia} from 'pinia'
 import { createPersistedState } from 'pinia-persistedstate-plugin'
 
 //导入封装的api对象
-import api from './api/api.js/index.js'
+// import api from './api/api.js/index.js'
 
 const app = createApp(App)
 const pinia = createPinia();
@@ -32,6 +32,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   }
 
 //将api对象设置为app的全局属性
-app.config.globalProperties.$api = api
+// app.config.globalProperties.$api = api
 
 app.mount('#app')

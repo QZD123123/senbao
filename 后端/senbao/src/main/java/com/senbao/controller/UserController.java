@@ -13,8 +13,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("")
-    public Result userPageSelect(Integer page, Integer pageSize){
+    public Result userPageSelect(@RequestParam Integer page, @RequestParam Integer pageSize){
         Result result =userService.userPageSelect(page,pageSize);
         return result;
     }
@@ -27,6 +28,8 @@ public class UserController {
 
     @PatchMapping("{id}")
     public Result updateUserById(@PathVariable Integer id, @RequestBody User user){
+        System.out.println("user = " + user);
+        System.out.println("id = " + id);
         Result result = userService.updateUserById(id,user);
         return result;
     }

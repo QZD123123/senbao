@@ -30,7 +30,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf(csrf-> csrf.disable());
         //放行login接口
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/chart/**","/user/**").permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/chart/**").permitAll().anyRequest().authenticated());
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
