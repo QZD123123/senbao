@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.senbao.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.senbao.pojo.Order">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="totalPrice" column="totalPrice" jdbcType="VARCHAR"/>
+        <result property="customerName" column="customerName" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="progress" column="progress" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="DATE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,address,offer,buyer,
+        phone,progress,create_time
+    </sql>
+
+    <update id="updateOrderById" parameterType="map">
+        UPDATE `order`
+        SET
+            customerName = #{order.customerName},
+            address = #{order.address},
+            phone = #{order.phone},
+            totalPrice = #{order.totalPrice},
+            create_time = #{order.createTime},
+            progress = #{order.progress}
+        WHERE id = #{id};
+    </update>
+
+    <select id="selectOrderCount" resultType="java.lang.Long">
+        select count(*) from `order`
+    </select>
+
+    <select id="selectOrderPage" resultType="com.senbao.pojo.Order">
+        SELECT * FROM `order`
+                          LIMIT #{page}, #{pageSize};
+    </select>
+
+</mapper>

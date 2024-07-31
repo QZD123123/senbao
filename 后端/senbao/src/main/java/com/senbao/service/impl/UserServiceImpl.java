@@ -91,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 //        ArrayList<User> list = new ArrayList<>();
 
         Map data = new LinkedHashMap();
-        data.put("tip","成功获取第"+page+"页，共"+pageSize+"条数据");
+        data.put("tip","成功获取第"+page+"页，共"+records.size()+"条数据");
         data.put("page",page);
         data.put("count",pageSize);
         data.put("pageTotal",(int)Math.ceil(count/pageSize));

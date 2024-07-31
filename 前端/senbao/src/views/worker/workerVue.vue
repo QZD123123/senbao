@@ -12,7 +12,7 @@
             <el-table-column fixed prop="id" label="编号" width="120" />
             <el-table-column prop="username" label="姓名" width="120" />
             <el-table-column prop="phone" label="电话" width="120" />
-            <el-table-column prop="role" label="职位" width="120" />
+            <el-table-column prop="role" label="职位" width="120" :formatter="roleFormatter" />
             <el-table-column prop="salary" label="薪水" width="120" />
             <el-table-column prop="address" label="地址" width="300" />
             <el-table-column prop="joinedDate" label="入职时间" width="120" />
@@ -218,6 +218,17 @@ const editEmployee = (row) => {
     dialogVisible.value = true;
 };
 
+const roleFormatter = (row, column, cellValue, index) => {
+    const roleMap = {
+        'admin': '管理员',
+        'designer': '设计师',
+        'carpenter': '木工',
+        'painter': '油漆工',
+        'ironman': '五金工',
+        'user': '杂工',
+    };
+    return roleMap[cellValue] || cellValue;
+};
 
 
 </script>
