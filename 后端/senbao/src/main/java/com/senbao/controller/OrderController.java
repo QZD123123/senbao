@@ -28,6 +28,17 @@ public class OrderController {
         return result;
     }
 
+    @PostMapping("")
+    public Result createOrder(@RequestBody Order order){
+        Result result = orderService.createOrder(order);
+        return result;
+    }
+
+    @DeleteMapping("{id}")
+    public Result deleteOrderById(@PathVariable Integer id){
+        Result result = orderService.deleteOrderById(id);
+        return result;
+    }
 
 
 }

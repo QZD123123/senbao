@@ -204,7 +204,7 @@ const openEditOrderDialog = (row) => {
 const addOrder = async () => {
     try {
         let result = await addOrderService(orderModel.value);
-        if (result.data.tip === '添加成功') {
+        if (result.data.tip === '订单添加成功') {
             ElMessage.success(result.data.tip || '订单添加成功');
             dialogVisible.value = false;
             fetchOrderData(currentPage.value, pageSize.value);
@@ -241,7 +241,7 @@ const deleteOrder = async (id) => {
     try {
         let result = await deleteOrderService(id);
         if (result.data.tip === '成功删除订单') {
-            ElMessage.success(result.data.tip || '订单删除成功');
+            ElMessage.success(result.data.tip || '成功删除订单');
             fetchOrderData(currentPage.value, pageSize.value);
         } else {
             ElMessage.error(result.data.message || '删除订单失败');

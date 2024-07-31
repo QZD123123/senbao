@@ -15,4 +15,8 @@ public interface OrderMapper extends BaseMapper<Order> {
     List<Order> selectOrderPage(@Param("page") Integer page, @Param("pageSize") Integer pageSize);
 
     int updateOrderById(@Param("id") Integer id, @Param("order") Order order);
+
+    int insertOrder(@Param("TableOrder") Order order);
+
+    int deleteOrderById(@Param("id") Integer id);
 }

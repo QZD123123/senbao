@@ -20,6 +20,11 @@
         phone,progress,create_time
     </sql>
 
+    <insert id="insertOrder" parameterType="com.senbao.pojo.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order` ( address, totalPrice, customerName, phone, progress, create_time )
+        VALUES  ( #{TableOrder.address}, #{TableOrder.totalPrice}, #{TableOrder.customerName}, #{TableOrder.phone} ,#{TableOrder.progress}, #{TableOrder.createTime} )
+    </insert>
+
     <update id="updateOrderById" parameterType="map">
         UPDATE `order`
         SET
@@ -31,6 +36,10 @@
             progress = #{order.progress}
         WHERE id = #{id};
     </update>
+
+    <delete id="deleteOrderById">
+        delete from `order` where id = #{id}
+    </delete>
 
     <select id="selectOrderCount" resultType="java.lang.Long">
         select count(*) from `order`

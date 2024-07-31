@@ -59,9 +59,46 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             data.put("tip","更新订单时发生错误");
             return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
         }
-
-
-
-
     }
+
+    @Override
+    public Result createOrder(Order order) {
+        Map data = new LinkedHashMap();
+        try{
+            int row = orderMapper.insertOrder(order);
+            if (row > 0) {
+                data.put("tip","订单添加成功");
+                return Result.ok(data);
+            }else{
+                data.put("tip","添加订单失败");
+                return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            data.put("tip","添加订单时发生错误");
+            return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
+        }
+    }
+
+    @Override
+    public Result deleteOrderById(Integer id) {
+        Map data = new LinkedHashMap();
+        try{
+            int row = orderMapper.deleteOrderById(id);
+            if (row > 0) {
+                data.put("tip","成功删除订单");
+                return Result.ok(data);
+            }else{
+                data.put("tip","删除订单失败");
+                return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            data.put("tip","删除订单时发生错误");
+            return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
+        }
+    }
+
+
+
 }
