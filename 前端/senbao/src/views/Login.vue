@@ -77,14 +77,16 @@ import {useRouter} from 'vue-router'
 //     router.push('/')
     
 // }
-
+import { useUserStore } from '@/stores/auth.js'
 const router = useRouter();
 const tokenStore = useTokenStore();
+const userStore = useUserStore();
 const login = async () => {
     try {
         const result = await userLoginService(registerData.value);
         ElMessage.success(result.data.tip || '登录成功');
         tokenStore.setToken(result.data.token); // 假设 token 存储在 result.data.token
+        userStore.login();
         router.push('/'); // 跳转到首页
     } catch (error) {
         ElMessage.error('登录失败');

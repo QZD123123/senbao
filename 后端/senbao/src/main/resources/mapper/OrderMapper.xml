@@ -50,4 +50,18 @@
                           LIMIT #{page}, #{pageSize};
     </select>
 
+    <select id="MonthlyTotalOrderPrice" resultType="java.util.HashMap">
+        SELECT
+            DATE_FORMAT(create_time, '%Y-%m') AS month,  -- 格式化为 "年-月" 的形式
+    SUM(totalPrice) AS monthlyOrderTotals              -- 计算每个月的订单总价
+        FROM
+            `order`
+        WHERE
+            YEAR(create_time) = YEAR(CURDATE())         -- 只选择今年的数据
+        GROUP BY
+            DATE_FORMAT(create_time, '%Y-%m')           -- 按月份分组
+        ORDER BY
+            month;                                     -- 按月份排序
+    </select>
+
 </mapper>

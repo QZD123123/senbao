@@ -11,7 +11,41 @@ import {
 } from '@element-plus/icons-vue'
 import avatar from '@/assets/default.png'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { useTokenStore } from '@/stores/token.js'
+import { useUserStore } from '@/stores/auth.js'
+import { useRouter } from 'vue-router'
 
+// 处理下拉菜单的命令
+const handleCommand = (command) => {
+    switch (command) {
+        case 'info':
+            router.push('/user/info')
+            break
+        case 'avatar':
+            router.push('/user/avatar')
+            break
+        case 'resetPassword':
+            router.push('/user/resetPassword')
+            break
+        case 'logout':
+            logout()
+            break
+        default:
+            break
+    }
+}
+
+const router = useRouter();
+const tokenStore = useTokenStore();
+const userStore = useUserStore();
+// 退出登录函数
+const logout = () => {
+    // 清除存储的 token
+    tokenStore.removeToken() // 或者使用 tokenStore.setToken('') 
+    userStore.logout();
+    // 跳转到登录页面
+    router.push('/login')
+}
 </script>
 
 <template>
