@@ -6,7 +6,8 @@ import LoginVue from '@/views/Login.vue';
 import LayoutVue from '@/views/Layout.vue';
 import HomeVue from '@/views/home/homeVue.vue';
 import OrderVue from '@/views/order/orderVue.vue';
-import InventoryVue from '@/views/inventory/inventoryVue.vue';
+import WarehouseVue from '@/views/warehouse/warehouseVue.vue'
+// import InventoryVue from '@/views/inventory/inventoryVue.vue'; 
 import ProductionCostsVue from '@/views/productionCosts/productionCostsVue.vue';
 import SupplyVue from '@/views/supply/supplyVue.vue';
 import SupplierVue from '@/views/supplier/supplierVue.vue';
@@ -28,7 +29,7 @@ const routes = [
       { path: '/home', component: HomeVue },
       { path: '/worker', component: WorkerVue },
       { path: '/order', component: OrderVue },
-      { path: '/inventory', component: InventoryVue },
+      { path: '/warehouse', component: WarehouseVue },
       { path: '/productionCosts', component: ProductionCostsVue },
       { path: '/supply', component: SupplyVue },
       { path: '/supplier', component: SupplierVue },

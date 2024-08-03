@@ -70,7 +70,7 @@ const logout = () => {
                     </el-icon>
                     <span>订单</span>
                 </el-menu-item>
-                <el-menu-item index="/inventory">
+                <el-menu-item index="/warehouse">
                     <el-icon>
                         <HomeFilled />
                     </el-icon>
