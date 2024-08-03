@@ -72,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             int rows = userMapper.insert(user);
             System.out.println("rows = " + rows);
             System.out.println("user = " + user);
-            data.put("tip","注册成功");
+            data.put("tip","员工添加成功");
         }else {
             data.put("tip","账号已存在");
             return Result.build(data,ResultCodeEnum.requested_resource_no_modified);
@@ -81,25 +81,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Result userPageSelect(Integer page, Integer pageSize) {
-        //获取员工总数
-        Long count = userMapper.selectUserCount();
+    public Result userPageSelect(Integer page, Integer pageSize, String role) {
+        // 计算分页的起始位置
+        int offset = (page - 1) * pageSize;
 
-        //分页查询订单列表
-        List<User> records = userMapper.selectUserPage((page - 1) * pageSize, pageSize);
+        // 获取员工总数（考虑到可能有职位筛选条件）
+        Long count = (role != null && !role.isEmpty())
+                ? userMapper.selectUserCountByRole(role)
+                : userMapper.selectUserCount();
 
-//        ArrayList<User> list = new ArrayList<>();
+        // 根据分页和职位筛选条件查询员工列表
+        List<User> records = (role != null && !role.isEmpty())
+                ? userMapper.selectUserPageByRole(offset, pageSize, role)
+                : userMapper.selectUserPage(offset, pageSize);
 
-        Map data = new LinkedHashMap();
-        data.put("tip","成功获取第"+page+"页，共"+records.size()+"条数据");
-        data.put("page",page);
-        data.put("count",pageSize);
-        data.put("pageTotal",(int)Math.ceil(count/pageSize));
-        data.put("userTotal",count);
-        data.put("userList",records);
+        // 准备返回的数据
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("tip", "成功获取第" + page + "页，共" + records.size() + "条数据");
+        data.put("page", page);
+        data.put("count", pageSize);
+        data.put("pageTotal", (int) Math.ceil((double) count / pageSize));  // 使用 double 类型进行精确计算
+        data.put("userTotal", count);
+        data.put("userList", records);
 
         return Result.ok(data);
     }
+
 
     @Override
     public Result selectUserById(Integer id) {

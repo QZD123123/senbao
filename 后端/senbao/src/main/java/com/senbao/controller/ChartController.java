@@ -22,4 +22,10 @@ public class ChartController {
         return result;
     }
 
+    @GetMapping("/dashboard")
+    public Result OrderCustomerSupplier(){
+        Result result = chartService.OrderCustomerSupplier();
+        return result;
+    }
+
 }

@@ -8,6 +8,21 @@
                 </div>
             </div>
         </template>
+
+        <!-- 职位筛选器 -->
+        <div class="filter-container">
+            <el-select v-model="selectedRole" placeholder="请选择职位" @change="filterByRole">
+                <el-option label="全部" value=""></el-option>
+                <el-option label="管理员" value="admin"></el-option>
+                <el-option label="会计" value="accountant"></el-option>
+                <el-option label="设计师" value="designer"></el-option>
+                <el-option label="木工" value="carpenter"></el-option>
+                <el-option label="油漆工" value="painter"></el-option>
+                <el-option label="五金工" value="ironman"></el-option>
+                <el-option label="杂工" value="user"></el-option>
+            </el-select>
+        </div>
+        
         <el-table :data="WorkerData.userList" style="width: 100%" stripe>
             <el-table-column fixed prop="id" label="编号" width="120" />
             <el-table-column prop="username" label="姓名" width="120" />
@@ -37,10 +52,15 @@
                         placeholder="请输入11位手机号码"></el-input>
                 </el-form-item>
                 <el-form-item label="职位" prop="role">
-                    <el-select v-model="employeeModel.role" placeholder="请选择职位">
-                        <el-option label="管理员" value="admin"></el-option>
-                        <el-option label="职员" value="user"></el-option>
-                    </el-select>
+                    <el-radio-group v-model="employeeModel.role">
+                        <el-radio value="admin">管理员</el-radio>
+                        <el-radio value="accountant">会计</el-radio>
+                        <el-radio value="designer">设计师</el-radio>
+                        <el-radio value="carpenter">木工</el-radio>
+                        <el-radio value="painter">油漆工</el-radio>
+                        <el-radio value="ironman">五金工</el-radio>
+                        <el-radio value="user">杂工</el-radio>
+                    </el-radio-group>
                 </el-form-item>
                 <el-form-item label="薪水" prop="salary">
                     <el-input v-model="employeeModel.salary" type="number" min="0"></el-input>
@@ -55,7 +75,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="isEditing ? updateEmployee() : addEmployee">
+                    <el-button type="primary" @click="isEditing ? updateEmployee() : addEmployee()">
                         {{ isEditing ? '更新' : '确认' }}
                     </el-button>
                 </span>
@@ -87,7 +107,7 @@ const WorkerData = ref({
 
 const dialogVisible = ref(false);
 const employeeModel = ref({
-    id:'',
+    id: '',
     username: '',
     phone: '',
     role: '',
@@ -111,20 +131,27 @@ const rules = {
     joinedDate: [{ required: true, message: '请选择入职时间', trigger: 'change' }]
 };
 
-const fetchWorkerData = async (page = 1, pageSize = 10) => {
-    let result = await WorkerListService(page, pageSize);
+const fetchWorkerData = async (page = 1, pageSize = 10, role = '') => {
+    let result = await WorkerListService(page, pageSize, role);  // 传递 role 参数
     ElMessage.success(result.data.tip || '成功获取员工信息');
     WorkerData.value = result.data;
 };
 
 const handleSizeChange = (size) => {
     pageSize.value = size;
-    fetchWorkerData(currentPage.value, size);
+    fetchWorkerData(currentPage.value, size, selectedRole.value);  // 传递 selectedRole
 };
 
 const handleCurrentChange = (page) => {
     currentPage.value = page;
-    fetchWorkerData(page, pageSize.value);
+    fetchWorkerData(page, pageSize.value, selectedRole.value);  // 传递 selectedRole
+};
+
+const selectedRole = ref('');  // 用于存储选中的职位
+
+const filterByRole = (role) => {
+    selectedRole.value = role;
+    fetchWorkerData(currentPage.value, pageSize.value, role);  // 根据选中的职位重新获取数据
 };
 
 const isEditing = ref(false);
@@ -132,7 +159,7 @@ const isEditing = ref(false);
 const openAddEmployeeDialog = () => {
     isEditing.value = false;
     employeeModel.value = {
-        id:'',
+        id: '',
         username: '',
         phone: '',
         role: '',
@@ -152,7 +179,7 @@ const openEditEmployeeDialog = (row) => {
 const addEmployee = async () => {
     try {
         let result = await addWorker(employeeModel.value);
-        if (result.data.tip === '注册成功') {
+        if (result.data.tip === '员工添加成功') {
             ElMessage.success(result.data.tip || '员工添加成功');
             dialogVisible.value = false;
             fetchWorkerData(currentPage.value, pageSize.value);
@@ -166,8 +193,8 @@ const addEmployee = async () => {
 
 const updateEmployee = async () => {
     try {
-        
-        
+
+
         // Ensure employeeModel.value.id is set
         if (!employeeModel.value.id) {
             ElMessage.error('员工ID丢失，无法更新');
@@ -176,7 +203,7 @@ const updateEmployee = async () => {
         console.log(employeeModel.value.id);
         let result = await updateWorker(employeeModel.value.id, employeeModel.value);
         console.log(result);
-        
+
         if (result.data.tip === '成功更新用户信息') {
             ElMessage.success(result.data.tip || '员工信息更新成功');
             dialogVisible.value = false;
@@ -221,6 +248,7 @@ const editEmployee = (row) => {
 const roleFormatter = (row, column, cellValue, index) => {
     const roleMap = {
         'admin': '管理员',
+        'accountant': '会计',
         'designer': '设计师',
         'carpenter': '木工',
         'painter': '油漆工',

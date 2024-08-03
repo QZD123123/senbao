@@ -5,7 +5,7 @@ import com.senbao.pojo.Order;
 import com.senbao.utils.Result;
 
 public interface OrderService extends IService<Order> {
-    Result orderPageSelect(Integer page, Integer pageSize);
+    Result orderPageSelect(Integer page, Integer pageSize, String progress);
 
     Result UpdateOrderById(Integer id, Order order);
 

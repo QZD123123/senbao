@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senbao.mapper.SupplierMapper">
+
+    <resultMap id="BaseResultMap" type="com.senbao.pojo.Supplier">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="company" column="company" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,phone,
+        company
+    </sql>
+
+    <select id="CountSupplier" resultType="java.lang.String">
+        SELECT
+            COUNT(*) AS supplier_count
+        FROM
+            `supplier`;
+    </select>
+
+
+</mapper>

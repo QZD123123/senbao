@@ -17,8 +17,8 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("")
-    public Result orderPageSelect(Integer page, Integer pageSize){
-        Result result = orderService.orderPageSelect(page,pageSize);
+    public Result orderPageSelect(Integer page, Integer pageSize, @RequestParam(required = false) String progress){
+        Result result = orderService.orderPageSelect(page,pageSize,progress);
         return result;
     }
 

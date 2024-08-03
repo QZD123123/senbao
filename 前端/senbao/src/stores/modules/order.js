@@ -2,11 +2,12 @@
 import request from '@/utils/request.js';
 
 // 获取订单列表，支持分页
-export const OrderListService = (page = 1, pageSize = 10) => {
+export const OrderListService = (page = 1, pageSize = 10, progress = '') => {
     return request.get('/order', {
         params: {
             page,
-            pageSize
+            pageSize,
+            progress
         }
     });
 };

@@ -1,7 +1,7 @@
 package com.senbao.service.impl;
 
-import com.senbao.DTO.MonthlyTotalOrderPriceDTO;
 import com.senbao.mapper.OrderMapper;
+import com.senbao.mapper.SupplierMapper;
 import com.senbao.service.ChartService;
 import com.senbao.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,13 @@ public class ChartServiceImpl implements ChartService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private SupplierMapper supplierMapper;
+
     @Override
     public Result MonthlyTotalOrderPrice() {
         // 从数据库获取数据
         List<Map<String, Object>> result = orderMapper.MonthlyTotalOrderPrice();
-
-        // 创建 DTO 对象
-        MonthlyTotalOrderPriceDTO dto = new MonthlyTotalOrderPriceDTO();
 
         List<String> months = new ArrayList<>();
         List<String> monthlyOrderTotals = new ArrayList<>();
@@ -46,4 +46,22 @@ public class ChartServiceImpl implements ChartService {
 
 
     }
+
+    @Override
+    public Result OrderCustomerSupplier() {
+        String sales = orderMapper.TotalOrderPriceOfYear();
+        String orders = orderMapper.CountOrderOfYear();
+        String customers = orderMapper.CountCustomer();
+        String suppliers = supplierMapper.CountSupplier();
+
+        Map data = new LinkedHashMap();
+        data.put("sales",sales);
+        data.put("orders",orders);
+        data.put("customers",customers);
+        data.put("suppliers",suppliers);
+
+        return Result.ok(data);
+
+    }
+
 }

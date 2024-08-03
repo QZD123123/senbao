@@ -8,6 +8,20 @@
                 </div>
             </div>
         </template>
+
+        <!-- 筛选器 -->
+        <div class="filter-container">
+            <el-select v-model="selectedProgress" placeholder="选择进度" @change="fetchOrderData">
+                <el-option label="全部" value=""></el-option>
+                <el-option
+                    v-for="(status, index) in progressStatuses"
+                    :key="index"
+                    :label="status.text"
+                    :value="status.value">
+                </el-option>
+            </el-select>
+        </div>
+
         <el-table :data="OrderData.orderList" style="width: 100%" stripe>
             <el-table-column fixed prop="id" label="订单编号" width="120" />
             <el-table-column prop="customerName" label="客户姓名" width="150" />
@@ -78,9 +92,10 @@
         </div>
     </el-card>
 </template>
+
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { OrderListService, addOrderService, deleteOrderService, updateOrderService } from '@/stores/modules/order.js';
 
 // 分页相关
@@ -90,6 +105,19 @@ const OrderData = ref({
     orderList: [],
     orderTotal: 0
 });
+
+// 筛选相关
+const selectedProgress = ref('');  // 当前选择的工作进度
+const progressStatuses = [
+    { value: '0', text: '测量中' },
+    { value: '1', text: '测量完成' },
+    { value: '2', text: '设计中' },
+    { value: '3', text: '设计完成' },
+    { value: '4', text: '生产中' },
+    { value: '5', text: '生产完成' },
+    { value: '6', text: '安装中' },
+    { value: '7', text: '安装完成' },
+];
 
 // 弹窗相关
 const dialogVisible = ref(false);
@@ -111,22 +139,10 @@ const rules = {
         { min: 2, message: '姓名长度必须大于等于2个字符', trigger: 'blur' }
     ],
     address: [{ required: true, message: '请输入安装地点', trigger: 'blur' }],
-    phone: [{ required: true, message: '请输入电话', trigger: 'blur' },{ pattern: /^1\d{10}$/, message: '电话必须是以1开头的11位数', trigger: 'blur' }],
+    phone: [{ required: true, message: '请输入电话', trigger: 'blur' }, { pattern: /^1\d{10}$/, message: '电话必须是以1开头的11位数', trigger: 'blur' }],
     totalPrice: [{ required: true, message: '请输入总价', trigger: 'blur' }],
     createTime: [{ required: true, message: '请选择订单日期', trigger: 'change' }]
 };
-
-// 进度状态选项
-const progressStatuses = [
-    { value: '0', text: '测量中' },
-    { value: '1', text: '测量完成' },
-    { value: '2', text: '设计中' },
-    { value: '3', text: '设计完成' },
-    { value: '4', text: '生产中' },
-    { value: '5', text: '生产完成' },
-    { value: '6', text: '安装中' },
-    { value: '7', text: '安装完成' },
-];
 
 // 获取进度标签类型
 const getProgressTagType = (progress) => {
@@ -155,9 +171,9 @@ const getProgressText = (progress) => {
 };
 
 // 获取订单数据
-const fetchOrderData = async (page = 1, pageSize = 10) => {
+const fetchOrderData = async () => {
     try {
-        let result = await OrderListService(page, pageSize);
+        let result = await OrderListService(currentPage.value, pageSize.value, selectedProgress.value);
         ElMessage.success(result.data.tip || '成功获取订单信息');
         OrderData.value = result.data;
     } catch (error) {
@@ -168,13 +184,13 @@ const fetchOrderData = async (page = 1, pageSize = 10) => {
 // 处理分页大小变化
 const handleSizeChange = (size) => {
     pageSize.value = size;
-    fetchOrderData(currentPage.value, size);
+    fetchOrderData();
 };
 
 // 处理当前页变化
 const handleCurrentChange = (page) => {
     currentPage.value = page;
-    fetchOrderData(page, pageSize.value);
+    fetchOrderData();
 };
 
 // 打开添加订单弹窗
@@ -195,8 +211,7 @@ const openAddOrderDialog = () => {
 // 打开编辑订单弹窗
 const openEditOrderDialog = (row) => {
     isEditing.value = true;
-    // 确保 progress 值是字符串
-    orderModel.value = { ...row, progress: String(row.progress) }; 
+    orderModel.value = { ...row, progress: String(row.progress) }; // 确保 progress 值是字符串
     dialogVisible.value = true;
 };
 
@@ -207,7 +222,7 @@ const addOrder = async () => {
         if (result.data.tip === '订单添加成功') {
             ElMessage.success(result.data.tip || '订单添加成功');
             dialogVisible.value = false;
-            fetchOrderData(currentPage.value, pageSize.value);
+            fetchOrderData();
         } else {
             ElMessage.error(result.data.tip || '添加订单失败');
         }
@@ -227,7 +242,7 @@ const updateOrder = async () => {
         if (result.data.tip === '成功更新订单信息') {
             ElMessage.success(result.data.tip || '订单信息更新成功');
             dialogVisible.value = false;
-            fetchOrderData(currentPage.value, pageSize.value);
+            fetchOrderData();
         } else {
             ElMessage.error(result.data.tip || '更新订单信息失败');
         }
@@ -242,7 +257,7 @@ const deleteOrder = async (id) => {
         let result = await deleteOrderService(id);
         if (result.data.tip === '成功删除订单') {
             ElMessage.success(result.data.tip || '成功删除订单');
-            fetchOrderData(currentPage.value, pageSize.value);
+            fetchOrderData();
         } else {
             ElMessage.error(result.data.message || '删除订单失败');
         }
@@ -251,11 +266,15 @@ const deleteOrder = async (id) => {
     }
 };
 
+// 监视筛选条件变化
+watch(selectedProgress, fetchOrderData);
+
 // 初始化加载数据
 onMounted(() => {
-    fetchOrderData(currentPage.value, pageSize.value);
+    fetchOrderData();
 });
 </script>
+
 <style scoped>
 .header {
     display: flex;

@@ -1,26 +1,34 @@
 <template>
-    <div id="home">
-      <!-- 可以放置多个组件，这里以 MonthlyTotalOrderPrice 为例 -->
-      <MonthlyTotalOrderPrice />
-      <!-- 其他组件 -->
-      <!-- <OtherComponent /> -->
-      <!-- 继续添加其他组件 -->
+  <div id="home">
+    <div class="charts-container">
+      <OrderCustomerSupplier class="chart" />
+      <MonthlyTotalOrderPrice class="chart" />
     </div>
-  </template>
-  
-  <script setup>
-  import MonthlyTotalOrderPrice from '@/views/home/charts/MonthlyTotalOrderPrice.vue';
-  // 引入其他组件
-//   import OtherComponent from '@/views/home/charts/OtherComponent.vue'; // 示例：引入其他组件
-  </script>
-  
-  <style>
-  #home {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-    /* 其他样式 */
-  }
-  </style>
-  
+  </div>
+</template>
+
+<script setup>
+import MonthlyTotalOrderPrice from '@/views/home/charts/MonthlyTotalOrderPrice.vue';
+import OrderCustomerSupplier from '@/views/home/charts/OrderCustomerSupplier.vue';
+</script>
+
+<style>
+#home {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+  /* 其他样式 */
+}
+
+.charts-container {
+  display: flex;
+  justify-content: space-between; /* 水平分布 */
+  gap: 20px; /* 组件之间的间距 */
+  padding: 20px; /* 可选，添加内边距以适应布局 */
+}
+
+.chart {
+  flex: 1; /* 使每个图表占据相等的空间 */
+}
+</style>

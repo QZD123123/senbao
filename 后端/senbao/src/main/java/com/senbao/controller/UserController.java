@@ -15,8 +15,8 @@ public class UserController {
 
 
     @GetMapping("")
-    public Result userPageSelect(@RequestParam Integer page, @RequestParam Integer pageSize){
-        Result result =userService.userPageSelect(page,pageSize);
+    public Result userPageSelect(@RequestParam Integer page, @RequestParam Integer pageSize, @RequestParam(required = false) String role){
+        Result result =userService.userPageSelect(page,pageSize,role);
         return result;
     }
 

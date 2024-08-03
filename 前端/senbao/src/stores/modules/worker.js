@@ -29,11 +29,12 @@ export const userLoginService = (loginData) => {
 }
 
 // 员工列表查询，支持分页
-export const WorkerListService = (page = 1, pageSize = 10) => {
+export const WorkerListService = (page = 1, pageSize = 10, role = '') => {
     return request.get('/user', {
         params: {
             page,
-            pageSize
+            pageSize,
+            role
         }
     });
 }
@@ -53,10 +54,6 @@ export const deleteWorker = (id) => {
 };
 
 // 编辑员工信息
-// export const updateWorker = async (id, workerData) => {
-//     console.log("进到方法内部了");
-//     return request.patch(`/user/${id}`, workerData);
-// };
 export const updateWorker = async (id, workerData) => {
     console.log("进到方法内部了");
     try {

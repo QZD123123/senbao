@@ -18,25 +18,32 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Autowired
     private OrderMapper orderMapper;
+
     @Override
-    public Result orderPageSelect(Integer page, Integer pageSize) {
-        //获取订单数量
-        Long count = orderMapper.selectOrderCount();
+    public Result orderPageSelect(Integer page, Integer pageSize, String progress) {
+        int offset = (page - 1) * pageSize;
 
-        //分页查询订单列表
-        List<Order> records = orderMapper.selectOrderPage((page - 1)* pageSize, pageSize);
+        // 根据进度筛选订单数量
+        Long count = (progress != null && !progress.isEmpty())
+                ? orderMapper.selectOrderCountByProgress(progress)
+                : orderMapper.selectOrderCount();
 
-        Map data = new LinkedHashMap();
-        data.put("tip","成功获取第"+page+"页，共"+records.size()+"条数据");
-        data.put("page",page);
-        data.put("count",pageSize);
-        data.put("pageTotal",(int)Math.ceil(count/pageSize));
-        data.put("orderTotal",count);
-        data.put("orderList",records);
+        // 根据进度筛选分页查询订单列表
+        List<Order> records = (progress != null && !progress.isEmpty())
+                ? orderMapper.selectOrderPageByProgress(offset, pageSize, progress)
+                : orderMapper.selectOrderPage(offset, pageSize);
+
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("tip", "成功获取第" + page + "页，共" + records.size() + "条数据");
+        data.put("page", page);
+        data.put("count", pageSize);
+        data.put("pageTotal", (int) Math.ceil((double) count / pageSize));
+        data.put("orderTotal", count);
+        data.put("orderList", records);
 
         return Result.ok(data);
-
     }
+
 
     @Override
     public Result UpdateOrderById(Integer id, Order order) {

@@ -47,7 +47,7 @@
 
     <select id="selectOrderPage" resultType="com.senbao.pojo.Order">
         SELECT * FROM `order`
-                          LIMIT #{page}, #{pageSize};
+                          LIMIT #{offset}, #{limit};
     </select>
 
     <select id="MonthlyTotalOrderPrice" resultType="java.util.HashMap">
@@ -63,5 +63,44 @@
         ORDER BY
             month;                                     -- 按月份排序
     </select>
+
+    <select id="TotalOrderPriceOfYear" resultType="java.lang.String">
+        SELECT
+            SUM(totalPrice)
+        FROM
+            `order`
+        WHERE
+            YEAR(create_time) = YEAR(CURDATE());
+    </select>
+
+    <select id="CountOrderOfYear" resultType="java.lang.String">
+        SELECT
+            COUNT(*)
+        FROM
+            `order`
+        WHERE
+            YEAR(create_time) = YEAR(CURDATE());
+    </select>
+
+    <select id="CountCustomer" resultType="java.lang.String">
+        SELECT
+            COUNT(DISTINCT phone) AS unique_phone_count
+        FROM
+            `order`;
+    </select>
+
+    <select id="selectOrderCountByProgress" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM `order`
+        WHERE progress = #{progress}
+    </select>
+
+    <select id="selectOrderPageByProgress" resultType="com.senbao.pojo.Order">
+        SELECT *
+        FROM `order`
+        WHERE progress = #{progress}
+            LIMIT #{offset}, #{limit}
+    </select>
+
 
 </mapper>

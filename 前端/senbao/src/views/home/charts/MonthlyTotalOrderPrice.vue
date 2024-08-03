@@ -21,7 +21,7 @@
   
     // 获取数据
     try {
-      const response = await fetch('/api/chart/monthly');  // 替换为你的 API 端点
+      const response = await fetch('/api/chart/monthly');
       const result = await response.json();
       
       if (result.code === 200) {

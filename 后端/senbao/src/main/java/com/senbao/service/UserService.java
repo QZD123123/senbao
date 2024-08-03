@@ -11,7 +11,7 @@ public interface UserService extends IService<User> {
 
     Result register(User user);
 
-    Result userPageSelect(Integer page, Integer pageSize);
+    Result userPageSelect(Integer page, Integer pageSize, String role);
 
     Result selectUserById(Integer id);
 

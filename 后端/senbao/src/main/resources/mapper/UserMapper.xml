@@ -31,9 +31,16 @@
 
     <select id="selectUserPage" resultType="com.senbao.pojo.User">
         SELECT * FROM `user`
-                          LIMIT #{page}, #{pageSize};
+                          LIMIT #{offset}, #{limit};
     </select>
 
+    <select id="selectUserCountByRole" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM user WHERE role = #{role}
+    </select>
+
+    <select id="selectUserPageByRole" resultType="com.senbao.pojo.User">
+        SELECT * FROM user WHERE role = #{role} LIMIT #{offset}, #{limit}
+    </select>
 
 
 </mapper>
