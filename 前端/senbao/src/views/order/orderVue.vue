@@ -28,7 +28,7 @@
             <el-table-column prop="address" label="地址" width="150" />
             <el-table-column prop="phone" label="电话" width="120" />
             <el-table-column prop="totalPrice" label="总价" width="120" />
-            <el-table-column prop="createTime" label="订单日期" width="150" />
+            <el-table-column prop="createTime" label="订单日期" width="300" />
             <el-table-column prop="progress" label="工作进度" width="150">
                 <template #default="{ row }">
                     <el-tag :type="getProgressTagType(row.progress)" disable-transitions>

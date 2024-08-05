@@ -2,6 +2,7 @@ package com.senbao.mapper;
 
 import com.senbao.pojo.Warehouse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.senbao.response.warehouseManagerRSP;
 import com.senbao.response.warehouseRSP;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,6 +19,16 @@ public interface WarehouseMapper extends BaseMapper<Warehouse> {
     Long selectWarehouseCount();
 
     List<warehouseRSP> selectWarehousePage(@Param("offset") int offset, @Param("pageSize") Integer pageSize);
+
+    List<warehouseManagerRSP> selectWarehouseManager();
+
+    int insertWarehouse(@Param("TableWarehouse") Warehouse TableWarehouse);
+
+    int UpdateWarehouseById(@Param("id") Integer id, @Param("warehouse") Warehouse warehouse);
+
+    int deleteWarehouseById(@Param("id") Integer id);
+
+    List<Warehouse> getAll();
 }
 
 

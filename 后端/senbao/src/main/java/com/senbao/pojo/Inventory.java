@@ -8,16 +8,18 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * @TableName warehouse
+ * @TableName inventory
  */
-@TableName(value ="warehouse")
+@TableName(value ="inventory")
 @Data
-public class Warehouse implements Serializable {
+public class Inventory implements Serializable {
     private Integer id;
 
-    private String location;
+    private Integer materialId;
 
-    private Integer managerId;
+    private Integer warehouseId;
+
+    private Integer quantity;
 
     private static final long serialVersionUID = 1L;
 }

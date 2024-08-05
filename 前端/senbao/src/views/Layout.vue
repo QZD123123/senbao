@@ -76,23 +76,29 @@ const logout = () => {
                     </el-icon>
                     <span>仓库</span>
                 </el-menu-item>
+                <el-menu-item index="/inventory">
+                    <el-icon>
+                        <DataAnalysis />
+                    </el-icon>
+                    <span>库存</span>
+                </el-menu-item>
                 <el-menu-item index="/productionCosts">
                     <el-icon>
                         <BrushFilled />
                     </el-icon>
                     <span>生产消耗记录</span>
                 </el-menu-item>
-                <el-menu-item index="/supply">
-                    <el-icon>
-                        <ShoppingCartFull />
-                    </el-icon>
-                    <span>供应记录</span>
-                </el-menu-item>
                 <el-menu-item index="/supplier">
                     <el-icon>
                         <User />
                     </el-icon>
                     <span>供应商</span>
+                </el-menu-item>
+                <el-menu-item index="/supply">
+                    <el-icon>
+                        <ShoppingCartFull />
+                    </el-icon>
+                    <span>供应记录</span>
                 </el-menu-item>
                 <el-sub-menu>
                     <template #title>

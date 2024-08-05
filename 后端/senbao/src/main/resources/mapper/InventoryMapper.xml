@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senbao.mapper.InventoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.senbao.pojo.Inventory">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="materialId" column="materialId" jdbcType="INTEGER"/>
+            <result property="warehouseId" column="warehouseId" jdbcType="INTEGER"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,materialId,warehouseId,
+        quantity
+    </sql>
+
+    <update id="updateInventoryById" parameterType="map">
+        UPDATE `inventory`
+        SET
+            materialId = #{inventory.materialId},
+            warehouseId = #{inventory.warehouseId},
+            quantity = #{inventory.quantity}
+        WHERE id = #{id};
+    </update>
+
+    <!-- 根据物料ID和仓库ID筛选库存总数 -->
+    <select id="selectInventoryCountByMaterialAndWarehouse" resultType="long">
+        SELECT COUNT(*) AS count
+        FROM inventory i
+            JOIN material m ON i.materialId = m.id
+            JOIN warehouse w ON i.warehouseId = w.id
+        WHERE i.materialId = #{materialId}
+          AND i.warehouseId = #{warehouseId};
+    </select>
+
+    <!-- 根据物料ID筛选库存总数 -->
+    <select id="selectInventoryCountByMaterial" resultType="long">
+        SELECT COUNT(*) AS count
+        FROM inventory i
+            JOIN material m ON i.materialId = m.id
+            JOIN warehouse w ON i.warehouseId = w.id
+        WHERE i.materialId = #{materialId};
+    </select>
+
+    <!-- 根据仓库ID筛选库存总数 -->
+    <select id="selectInventoryCountByWarehouse" resultType="long">
+        SELECT COUNT(*) AS count
+        FROM inventory i
+            JOIN material m ON i.materialId = m.id
+            JOIN warehouse w ON i.warehouseId = w.id
+        WHERE i.warehouseId = #{warehouseId};
+    </select>
+
+    <!-- 不筛选，查询所有库存总数 -->
+    <select id="selectInventoryCount" resultType="long">
+        SELECT COUNT(*) AS count
+        FROM inventory i
+            JOIN material m ON i.materialId = m.id
+            JOIN warehouse w ON i.warehouseId = w.id;
+    </select>
+
+    <!-- 根据物料ID和仓库ID筛选并分页查询库存列表 -->
+    <select id="selectInventoryPageByMaterialAndWarehouse" resultType="com.senbao.pojo.Inventory">
+        SELECT i.*, m.name AS materialName, m.type AS materialType, w.location AS warehouseLocation
+        FROM inventory i
+                 JOIN material m ON i.materialId = m.id
+                 JOIN warehouse w ON i.warehouseId = w.id
+        WHERE i.materialId = #{materialId}
+          AND i.warehouseId = #{warehouseId}
+            LIMIT #{offset}, #{pageSize};
+    </select>
+
+    <!-- 根据物料ID筛选并分页查询库存列表 -->
+    <select id="selectInventoryPageByMaterial" resultType="com.senbao.pojo.Inventory">
+        SELECT i.*, m.name AS materialName, m.type AS materialType, w.location AS warehouseLocation
+        FROM inventory i
+                 JOIN material m ON i.materialId = m.id
+                 JOIN warehouse w ON i.warehouseId = w.id
+        WHERE i.materialId = #{materialId}
+            LIMIT #{offset}, #{pageSize};
+    </select>
+
+    <!-- 根据仓库ID筛选并分页查询库存列表 -->
+    <select id="selectInventoryPageByWarehouse" resultType="com.senbao.pojo.Inventory">
+        SELECT i.*, m.name AS materialName, m.type AS materialType, w.location AS warehouseLocation
+        FROM inventory i
+                 JOIN material m ON i.materialId = m.id
+                 JOIN warehouse w ON i.warehouseId = w.id
+        WHERE i.warehouseId = #{warehouseId}
+            LIMIT #{offset}, #{pageSize};
+    </select>
+
+    <!-- 不筛选，分页查询所有库存列表 -->
+    <select id="selectInventoryPage" resultType="com.senbao.pojo.Inventory">
+        SELECT i.*, m.name AS materialName, m.type AS materialType, w.location AS warehouseLocation
+        FROM inventory i
+                 JOIN material m ON i.materialId = m.id
+                 JOIN warehouse w ON i.warehouseId = w.id
+            LIMIT #{offset}, #{pageSize};
+    </select>
+
+
+</mapper>

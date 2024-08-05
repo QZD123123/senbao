@@ -1,12 +1,12 @@
 package com.senbao.controller;
 
+import com.senbao.pojo.Order;
+import com.senbao.pojo.Warehouse;
 import com.senbao.service.WarehouseService;
 import com.senbao.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -22,5 +22,34 @@ public class WarehouseController {
         return result;
     }
 
+    @PostMapping
+    public Result createWarehouse(@RequestBody Warehouse warehouse){
+        Result result = warehouseService.createWarehouse(warehouse);
+        return result;
+    }
+
+    @GetMapping("manager")
+    public Result selectWarehouseManager(){
+        Result result = warehouseService.selectWarehouseManager();
+        return result;
+    }
+
+    @PatchMapping("{id}")
+    public Result UpdateWarehouseById(@PathVariable Integer id, @RequestBody Warehouse warehouse){
+        Result result = warehouseService.UpdateWarehouseById(id,warehouse);
+        return result;
+    }
+
+    @DeleteMapping("{id}")
+    public Result deleteWarehouseById(@PathVariable Integer id){
+        Result result = warehouseService.deleteWarehouseById(id);
+        return result;
+    }
+
+    @GetMapping("getall")
+    public Result getAll(){
+        Result result = warehouseService.getAll();
+        return result;
+    }
 
 }

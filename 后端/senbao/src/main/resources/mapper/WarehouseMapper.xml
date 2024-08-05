@@ -7,12 +7,29 @@
     <resultMap id="BaseResultMap" type="com.senbao.pojo.Warehouse">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="location" column="location" jdbcType="VARCHAR"/>
-            <result property="managerid" column="managerId" jdbcType="INTEGER"/>
+            <result property="managerId" column="managerId" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,location,managerId
     </sql>
+
+    <insert id="insertWarehouse" parameterType="com.senbao.pojo.Warehouse" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `warehouse` ( location, managerId)
+        values ( #{TableWarehouse.location} ,#{TableWarehouse.managerId} )
+    </insert>
+
+    <update id="UpdateWarehouseById" parameterType="map">
+        UPDATE `warehouse`
+        SET
+            location = #{warehouse.location},
+            managerId = #{warehouse.managerId}
+        WHERE id = #{id};
+    </update>
+
+    <delete id="deleteWarehouseById">
+        delete from `warehouse` where id = #{id}
+    </delete>
 
     <select id="selectWarehouseCount" resultType="java.lang.Long">
         select count(*) from warehouse;
@@ -21,5 +38,13 @@
     <select id="selectWarehousePage" resultType="com.senbao.response.warehouseRSP">
         SELECT warehouse.id,location,username,phone FROM `warehouse`,`user` where warehouse.managerId=user.id
                           LIMIT #{offset}, #{pageSize};
+    </select>
+
+    <select id="selectWarehouseManager" resultType="com.senbao.response.warehouseManagerRSP">
+        SELECT `user`.id,user.username FROM `warehouse`,`user` WHERE warehouse.managerId=`user`.id
+    </select>
+
+    <select id="getAll" resultType="com.senbao.pojo.Warehouse">
+        select * from `warehouse`
     </select>
 </mapper>

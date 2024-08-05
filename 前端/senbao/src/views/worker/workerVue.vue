@@ -30,7 +30,7 @@
             <el-table-column prop="role" label="职位" width="120" :formatter="roleFormatter" />
             <el-table-column prop="salary" label="薪水" width="120" />
             <el-table-column prop="address" label="地址" width="300" />
-            <el-table-column prop="joinedDate" label="入职时间" width="120" />
+            <el-table-column prop="joinedDate" label="入职时间" width="300" />
             <el-table-column fixed="right" label="操作" min-width="120">
                 <template #default="{ row }">
                     <el-button link type="primary" size="large" @click="openEditEmployeeDialog(row)">编辑</el-button>

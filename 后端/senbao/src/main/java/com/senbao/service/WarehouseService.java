@@ -12,4 +12,14 @@ import com.senbao.utils.Result;
 public interface WarehouseService extends IService<Warehouse> {
 
     Result warehousePageSelect(Integer page, Integer pageSize);
+
+    Result selectWarehouseManager();
+
+    Result createWarehouse(Warehouse warehouse);
+
+    Result UpdateWarehouseById(Integer id, Warehouse warehouse);
+
+    Result deleteWarehouseById(Integer id);
+
+    Result getAll();
 }
