@@ -44,7 +44,7 @@ export const updateInventoryService = async (id, inventoryData) => {
 
 // 获取物料列表
 export const fetchMaterialsService = () => {
-    return request.get('/material');
+    return request.get('/material/getall');
 };
 
 // 获取仓库列表

@@ -82,6 +82,12 @@ const logout = () => {
                     </el-icon>
                     <span>库存</span>
                 </el-menu-item>
+                <el-menu-item index="/material">
+                    <el-icon>
+                        <SwitchFilled />
+                    </el-icon>
+                    <span>物料</span>
+                </el-menu-item>
                 <el-menu-item index="/productionCosts">
                     <el-icon>
                         <BrushFilled />
@@ -100,32 +106,6 @@ const logout = () => {
                     </el-icon>
                     <span>供应记录</span>
                 </el-menu-item>
-                <el-sub-menu>
-                    <template #title>
-                        <el-icon>
-                            <UserFilled />
-                        </el-icon>
-                        <span>个人中心</span>
-                    </template>
-                    <el-menu-item index="/user/info">
-                        <el-icon>
-                            <User />
-                        </el-icon>
-                        <span>基本资料</span>
-                    </el-menu-item>
-                    <el-menu-item index="/user/avatar">
-                        <el-icon>
-                            <Refresh />
-                        </el-icon>
-                        <span>更换头像</span>
-                    </el-menu-item>
-                    <el-menu-item index="/user/password">
-                        <el-icon>
-                            <EditPen />
-                        </el-icon>
-                        <span>重置密码</span>
-                    </el-menu-item>
-                </el-sub-menu>
             </el-menu>
         </el-aside>
         <!-- 右侧主区域 -->
@@ -133,7 +113,7 @@ const logout = () => {
             <el-space direction="vertical" alignment="stretch" :size="small">
                 <!-- 头部区域 -->
                 <el-header >
-                    <div style="">用户：卡卡酱 </div>
+                    <div style="">管理员：卡卡酱 </div>
                     <!-- <div>牛马程序员：<strong>{{userInfoStore.info.nickname}}</strong></div> -->
                     <!-- command:条目被点击后会触发，在事件函数上可以声明一个参数，接收条目对应的指令 -->
                     <el-dropdown placement="bottom-end" @command="handleCommand">

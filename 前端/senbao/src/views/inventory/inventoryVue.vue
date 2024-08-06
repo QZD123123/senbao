@@ -155,7 +155,7 @@ const fetchInventoryData = async () => {
   try {
       let result = await InventoryListService(currentPage.value, pageSize.value, selectedMaterial.value, selectedWarehouse.value);
       if (result.code === 200) {
-        ElMessage.success(result.message || '成功获取库存信息');
+        ElMessage.success(result.data.tip || '成功获取库存信息');
         InventoryData.value = result.data;
       } else {
         ElMessage.error(result.message || '获取库存信息失败');

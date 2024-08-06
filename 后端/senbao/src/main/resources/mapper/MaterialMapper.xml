@@ -16,6 +16,15 @@
         description
     </sql>
 
+    <update id="updateMaterialById" parameterType="map">
+        UPDATE `material`
+        SET
+            name = #{material.name},
+            type = #{material.type},
+            description = #{material.description}
+        WHERE id = #{id};
+    </update>
+
     <select id="getMaterial" resultType="com.senbao.pojo.Material">
         select * from material
     </select>

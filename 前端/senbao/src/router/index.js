@@ -8,12 +8,11 @@ import HomeVue from '@/views/home/homeVue.vue';
 import OrderVue from '@/views/order/orderVue.vue';
 import WarehouseVue from '@/views/warehouse/warehouseVue.vue'
 import InventoryVue from '@/views/inventory/inventoryVue.vue'; 
+import MaterialVue from '@/views/material/materialVue.vue'
 import ProductionCostsVue from '@/views/productionCosts/productionCostsVue.vue';
 import SupplyVue from '@/views/supply/supplyVue.vue';
 import SupplierVue from '@/views/supplier/supplierVue.vue';
-import UserAvatarVue from '@/views/user/UserAvatar.vue';
 import WorkerVue from '@/views/worker/workerVue.vue';
-import testVue from '@/views/user/test.vue';
 
 // 定义路由关系
 const routes = [
@@ -31,12 +30,10 @@ const routes = [
       { path: '/order', component: OrderVue },
       { path: '/warehouse', component: WarehouseVue },
       { path: '/inventory', component: InventoryVue },
+      { path: '/material', component: MaterialVue },
       { path: '/productionCosts', component: ProductionCostsVue },
       { path: '/supplier', component: SupplierVue },
       { path: '/supply', component: SupplyVue },
-      { path: '/user/info', component: testVue },
-      { path: '/user/avatar', component: UserAvatarVue },
-      { path: '/user/resetPassword', component: testVue },
     ],
   },
 ];
