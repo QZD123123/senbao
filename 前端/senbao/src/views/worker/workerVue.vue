@@ -30,20 +30,22 @@
             <el-table-column prop="role" label="职位" width="120" :formatter="roleFormatter" />
             <el-table-column prop="salary" label="薪水" width="120" />
             <el-table-column prop="address" label="地址" width="300" />
-            <el-table-column prop="joinedDate" label="入职时间" width="300" />
+            <el-table-column prop="joinedDate" label="入职时间" width="300">
+                <template #default="{ row }">
+                    {{ formatDate(row.joinedDate) }}
+                </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作" min-width="120">
                 <template #default="{ row }">
                     <el-button link type="primary" size="large" @click="openEditEmployeeDialog(row)">编辑</el-button>
                     <el-button link type="danger" size="large" @click="deleteEmployee(row.id)">删除</el-button>
                 </template>
             </el-table-column>
-
         </el-table>
 
         <!-- 添加员工弹窗 -->
         <el-dialog v-model="dialogVisible" :title="isEditing ? '编辑员工' : '添加员工'" width="30%">
             <el-form :model="employeeModel" :rules="rules" label-width="100px" style="padding-right: 30px">
-                <!-- 其他表单项与添加员工对话框相同 -->
                 <el-form-item label="姓名" prop="username">
                     <el-input v-model="employeeModel.username" minlength="2" maxlength="50"></el-input>
                 </el-form-item>
@@ -69,7 +71,7 @@
                     <el-input v-model="employeeModel.address"></el-input>
                 </el-form-item>
                 <el-form-item label="入职时间" prop="joinedDate">
-                    <el-date-picker v-model="employeeModel.joinedDate" type="date" format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="employeeModel.joinedDate" type="date" format="yyyy-MM-dd" placeholder="选择入职时间"></el-date-picker>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -81,7 +83,6 @@
                 </span>
             </template>
         </el-dialog>
-
 
         <!-- 分页控件 -->
         <div class="pagination-container">
@@ -193,17 +194,11 @@ const addEmployee = async () => {
 
 const updateEmployee = async () => {
     try {
-
-
-        // Ensure employeeModel.value.id is set
         if (!employeeModel.value.id) {
             ElMessage.error('员工ID丢失，无法更新');
             return;
         }
-        console.log(employeeModel.value.id);
         let result = await updateWorker(employeeModel.value.id, employeeModel.value);
-        console.log(result);
-
         if (result.data.tip === '成功更新用户信息') {
             ElMessage.success(result.data.tip || '员工信息更新成功');
             dialogVisible.value = false;
@@ -218,13 +213,9 @@ const updateEmployee = async () => {
 
 const deleteEmployee = async (id) => {
     try {
-        // 调用删除员工的 API
         let result = await deleteWorker(id);
-
-        // 检查服务器响应
         if (result.data.tip === '成功删除用户') {
             ElMessage.success(result.data.tip || '员工删除成功');
-            // 重新获取员工数据
             fetchWorkerData(currentPage.value, pageSize.value);
         } else {
             ElMessage.error(result.data.message || '删除员工失败');
@@ -234,11 +225,15 @@ const deleteEmployee = async (id) => {
     }
 };
 
-
 onMounted(() => {
     fetchWorkerData(currentPage.value, pageSize.value);
 });
 
+const formatDate = (date) => {
+  if (!date) return '';
+  const d = new Date(date);
+  return d.toISOString().split('T')[0]; // 只取日期部分 (YYYY-MM-DD)
+};
 
 const editEmployee = (row) => {
     employeeModel.value = { ...row };
@@ -257,8 +252,6 @@ const roleFormatter = (row, column, cellValue, index) => {
     };
     return roleMap[cellValue] || cellValue;
 };
-
-
 </script>
 
 <style scoped>
@@ -272,6 +265,5 @@ const roleFormatter = (row, column, cellValue, index) => {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    /* 可根据需要调整 */
 }
 </style>

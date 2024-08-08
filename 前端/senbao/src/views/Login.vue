@@ -2,16 +2,22 @@
 import { User, Lock } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-//控制注册与登录表单的显示， 默认显示注册
+import { useRouter } from 'vue-router'
+import { useTokenStore } from '@/stores/token.js'
+import { useUserStore } from '@/stores/auth.js'
+import { userRegisterService, userLoginService } from '@/stores/modules/worker.js'
+
+// 控制注册与登录表单的显示，默认显示注册
 const isRegister = ref(false)
-//定义数据模型
+
+// 定义数据模型
 const registerData = ref({
     phone: '12312312312',
     password: '123123',
     rePassword: ''
 })
 
-//校验密码的函数
+// 校验密码的函数
 const checkRePassword = (rule, value, callback) => {
     if (value === '') {
         callback(new Error('请输入确认密码'))
@@ -22,10 +28,10 @@ const checkRePassword = (rule, value, callback) => {
     }
 }
 
-//定义表单校验规则
+// 定义表单校验规则
 const rules = {
     phone: [
-        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { required: true, message: '请输入手机号', trigger: 'blur' },
         { min: 11, max: 11, message: '请输入11位数的手机号', trigger: 'blur' }
     ],
     password: [
@@ -37,63 +43,34 @@ const rules = {
     ]
 }
 
-//调用后台接口完成注册
-import { userRegisterService, userLoginService } from '@/stores/modules/worker.js'
+// 调用后台接口完成注册
 const register = async () => {
-    let result = await userRegisterService(registerData.value);
-    // if (result.code === 0) {
-    //     //成功了
-    //     alert(result.msg ? result.msg : '注册成功');
-    // } else {
-    //     //失败了
-    //     alert('注册失败')
-    // }
-    // alert(result.msg ? result.msg : '注册成功');
-    ElMessage.success(result.msg ? result.msg : '注册成功')
+    try {
+        const result = await userRegisterService(registerData.value);
+        ElMessage.success(result.msg ? result.msg : '注册成功')
+    } catch (error) {
+        ElMessage.error('注册失败')
+    }
 }
 
-//绑定数据，复用注册表单的数据模型
-//表单数据校验
-//登录函数
-import {useTokenStore} from '@/stores/token.js'
-import {useRouter} from 'vue-router'
-// const router = useRouter()
-// const tokenStore = useTokenStore()
-// const login = async () => {
-//     //调用接口，完成登录
-//     let result = await userLoginService(registerData.value);
-//     // if (result.code === 0) {
-//     //     //成功了
-//     //     alert(result.msg ? result.msg : '登录成功');
-//     // } else {
-//     //     //失败了
-//     //     alert('登录失败')
-//     // }
-//     // alert(result.msg ? result.msg : '登录成功');
-//     ElMessage.success(result.msg ? result.msg : '登录成功')
-//     //把得到的token存储到pinia中
-//     tokenStore.setToken(result.data)
-//     //跳转到首页 路由完成跳转
-//     router.push('/')
-    
-// }
-import { useUserStore } from '@/stores/auth.js'
+// 登录函数
 const router = useRouter();
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
+
 const login = async () => {
     try {
         const result = await userLoginService(registerData.value);
         ElMessage.success(result.data.tip || '登录成功');
-        tokenStore.setToken(result.data.token); // 假设 token 存储在 result.data.token
-        userStore.login();
+        tokenStore.setToken(result.data.token); // 存储 token
+        userStore.login(result.data.user); // 保存用户信息
         router.push('/'); // 跳转到首页
     } catch (error) {
         ElMessage.error('登录失败');
     }
 };
 
-//定义函数，清空数据模型的数据
+// 清空数据模型的数据
 const clearRegisterData = () => {
     registerData.value = {
         phone: '',
@@ -106,7 +83,7 @@ const clearRegisterData = () => {
 <template>
     <el-row class="login-page">
         <el-col :span="12" class="bg"></el-col>
-        <el-col :span="6" :offset="3" class="form" >
+        <el-col :span="6" :offset="3" class="form">
             <!-- 注册表单 -->
             <el-form ref="form" size="large" autocomplete="off" v-if="isRegister" :model="registerData" :rules="rules">
                 <el-form-item>
@@ -116,12 +93,10 @@ const clearRegisterData = () => {
                     <el-input :prefix-icon="User" placeholder="请输入手机号" v-model="registerData.phone"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码"
-                        v-model="registerData.password"></el-input>
+                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password"></el-input>
                 </el-form-item>
                 <el-form-item prop="rePassword">
-                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码"
-                        v-model="registerData.rePassword"></el-input>
+                    <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码" v-model="registerData.rePassword"></el-input>
                 </el-form-item>
                 <!-- 注册按钮 -->
                 <el-form-item>
@@ -144,8 +119,7 @@ const clearRegisterData = () => {
                     <el-input :prefix-icon="User" placeholder="请输入手机号" v-model="registerData.phone"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input name="password" :prefix-icon="Lock" type="password" placeholder="请输入密码"
-                        v-model="registerData.password"></el-input>
+                    <el-input name="password" :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password"></el-input>
                 </el-form-item>
                 <el-form-item class="flex">
                     <div class="flex">

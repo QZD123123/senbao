@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <div class="charts-container">
-      <OrderCustomerSupplier class="chart" />
+      <!-- <OrderCustomerSupplier class="chart" /> -->
       <MonthlyTotalOrderPrice class="chart" />
     </div>
   </div>
@@ -9,7 +9,7 @@
 
 <script setup>
 import MonthlyTotalOrderPrice from '@/views/home/charts/MonthlyTotalOrderPrice.vue';
-import OrderCustomerSupplier from '@/views/home/charts/OrderCustomerSupplier.vue';
+// import OrderCustomerSupplier from '@/views/home/charts/OrderCustomerSupplier.vue';
 </script>
 
 <style>

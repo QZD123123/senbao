@@ -17,7 +17,8 @@
   
   onMounted(async () => {
     const chartDom = chartContainer.value;
-    const myChart = echarts.init(chartDom, 'dark');
+    const myChart = echarts.init(chartDom);
+    // const myChart = echarts.init(chartDom, 'dark');//暗黑模式
   
     // 获取数据
     try {

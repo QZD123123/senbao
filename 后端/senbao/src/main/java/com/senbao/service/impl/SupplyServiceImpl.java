@@ -60,7 +60,7 @@ public class SupplyServiceImpl extends ServiceImpl<SupplyMapper, Supply> impleme
     public Result addSupply(Supply supply) {
         Map<String, Object> data = new LinkedHashMap<>();
         try {
-            int row = supplyMapper.insert(supply);
+            int row = supplyMapper.addSupply(supply);
             if (row > 0) {
                 data.put("tip", "供应记录添加成功");
                 return Result.ok(data);

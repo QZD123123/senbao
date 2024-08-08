@@ -2,6 +2,7 @@ package com.senbao.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.senbao.pojo.Supplier;
+import com.senbao.pojo.Warehouse;
 import com.senbao.service.SupplierService;
 import com.senbao.mapper.SupplierMapper;
 import com.senbao.utils.Result;
@@ -103,6 +104,14 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier>
             return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
         }
     }
+
+    @Override
+    public Result getAll() {
+        List<Supplier> list = supplierMapper.getAll();
+
+        Map data = new LinkedHashMap();
+        data.put("list",list);
+        return Result.ok(data);    }
 }
 
 

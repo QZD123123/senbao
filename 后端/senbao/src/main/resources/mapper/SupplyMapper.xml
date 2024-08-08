@@ -22,6 +22,11 @@
         createTime
     </sql>
 
+    <insert id="addSupply">
+        INSERT INTO supply (supplierId,materialId,quantity,warehouseId,cost,createtime)
+        VALUES (#{supply.supplierId},#{supply.materialId},#{supply.quantity},#{supply.warehouseId},#{supply.cost},#{supply.createTime})
+    </insert>
+
     <!-- 根据物料ID和供应商ID计算供应记录总数 -->
     <select id="selectSupplyCountByMaterialAndSupplier" resultType="java.lang.Long">
         SELECT COUNT(*)

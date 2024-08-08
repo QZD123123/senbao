@@ -51,3 +51,8 @@ export const fetchMaterialsService = () => {
 export const fetchSuppliersService = () => {
     return request.get('/supplier/getall');
 };
+
+// 获取仓库列表
+export const fetchWarehousesService = () => {
+    return request.get('/warehouse/getall');
+};

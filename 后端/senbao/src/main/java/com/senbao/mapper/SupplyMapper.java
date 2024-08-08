@@ -85,6 +85,7 @@ public interface SupplyMapper extends BaseMapper<Supply> {
      */
     int updateSupplyById(@Param("id") Integer id, @Param("supply") Supply supply);
 
+    int addSupply(@Param("supply") Supply supply);
 }
 
 

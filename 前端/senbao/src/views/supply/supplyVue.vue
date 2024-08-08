@@ -58,8 +58,21 @@
           {{ getSupplierName(row.supplierId) }}
         </template>
       </el-table-column>
+      <el-table-column
+        prop="warehouseId"
+        label="仓库位置"
+        width="200">
+        <template #default="{ row }">
+          {{ getWarehouseLocation(row.warehouseId) }}
+        </template>
+      </el-table-column>
       <el-table-column prop="quantity" label="数量" width="120" />
-      <el-table-column prop="date" label="供应日期" width="150" />
+      <el-table-column prop="cost" label="花费" width="120" />
+      <el-table-column prop="createTime" label="供应日期" width="150">
+        <template #default="{ row }">
+          {{ formatDate(row.createTime) }}
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" min-width="150">
         <template #default="{ row }">
           <el-button link type="primary" size="large" @click="openEditSupplyDialog(row)">编辑</el-button>
@@ -69,8 +82,8 @@
     </el-table>
 
     <!-- 添加/编辑供应记录弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="isEditing ? '编辑供应记录' : '添加供应记录'" width="40%">
-      <el-form :model="supplyModel" :rules="rules" label-width="100px" style="padding-right: 30px">
+    <el-dialog v-model="dialogVisible" :title="isEditing ? '编辑供应记录' : '添加供应记录'" width="50%">
+      <el-form :model="supplyModel" :rules="rules" label-width="120px" style="padding-right: 30px">
         <el-form-item label="物料" prop="materialId">
           <el-select v-model="supplyModel.materialId">
             <el-option
@@ -91,11 +104,24 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="仓库" prop="warehouseId">
+          <el-select v-model="supplyModel.warehouseId">
+            <el-option
+              v-for="(warehouse, index) in warehouses"
+              :key="index"
+              :label="warehouse.location"
+              :value="warehouse.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="数量" prop="quantity">
           <el-input v-model="supplyModel.quantity" type="number" min="0"></el-input>
         </el-form-item>
-        <el-form-item label="供应日期" prop="date">
-          <el-date-picker v-model="supplyModel.date" type="date" placeholder="选择供应日期"></el-date-picker>
+        <el-form-item label="花费" prop="cost">
+          <el-input v-model="supplyModel.cost" type="number" min="0" step="0.01"></el-input>
+        </el-form-item>
+        <el-form-item label="供应日期" prop="createTime">
+          <el-date-picker v-model="supplyModel.createTime" type="date" placeholder="选择供应日期"></el-date-picker>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -121,7 +147,7 @@
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus';
 import { ref, onMounted, watch } from 'vue';
-import { SupplyListService, addSupplyService, deleteSupplyService, updateSupplyService, fetchMaterialsService, fetchSuppliersService } from '@/stores/modules/supply.js';
+import { SupplyListService, addSupplyService, deleteSupplyService, updateSupplyService, fetchMaterialsService, fetchSuppliersService, fetchWarehousesService } from '@/stores/modules/supply.js';
 
 // 分页相关
 const currentPage = ref(1);
@@ -136,6 +162,7 @@ const selectedMaterial = ref('');  // 当前选择的物料编号
 const selectedSupplier = ref('');  // 当前选择的供应商编号
 const materials = ref([]); // 物料列表
 const suppliers = ref([]); // 供应商列表
+const warehouses = ref([]); // 仓库列表
 
 // 弹窗相关
 const dialogVisible = ref(false);
@@ -144,16 +171,20 @@ const supplyModel = ref({
   id: '',
   materialId: '',
   supplierId: '',
+  warehouseId: '',
   quantity: 0,
-  date: ''
+  cost: 0,
+  createTime: ''
 });
 
 // 验证规则
 const rules = {
   materialId: [{ required: true, message: '请选择物料', trigger: 'change' }],
   supplierId: [{ required: true, message: '请选择供应商', trigger: 'change' }],
+  warehouseId: [{ required: true, message: '请选择仓库', trigger: 'change' }],
   quantity: [{ required: true, message: '请输入数量', trigger: 'blur' }],
-  date: [{ required: true, message: '请选择供应日期', trigger: 'change' }]
+  cost: [{ required: true, message: '请输入花费', trigger: 'blur' }],
+  createTime: [{ required: true, message: '请选择供应日期', trigger: 'change' }]
 };
 
 // 获取供应记录数据
@@ -164,26 +195,28 @@ const fetchSupplyData = async () => {
       ElMessage.success(result.data.tip || '成功获取供应记录信息');
       supplyData.value = result.data;
     } else {
-      ElMessage.error(result.message || '获取供应记录信息失败');
+      ElMessage.error(result.data.tip || '获取供应记录信息失败');
     }
   } catch (error) {
     ElMessage.error('获取供应记录信息失败');
   }
 };
 
-// 获取物料和供应商数据
-const fetchMaterialsAndSuppliers = async () => {
+// 获取物料、供应商和仓库数据
+const fetchMaterialsAndSuppliersAndWarehouses = async () => {
   try {
     const materialsResult = await fetchMaterialsService();
     const suppliersResult = await fetchSuppliersService();
-    if (materialsResult.code === 200 && suppliersResult.code === 200) {
+    const warehousesResult = await fetchWarehousesService();
+    if (materialsResult.code === 200 && suppliersResult.code === 200 && warehousesResult.code === 200) {
       materials.value = materialsResult.data.list || [];
       suppliers.value = suppliersResult.data.list || [];
+      warehouses.value = warehousesResult.data.list || [];
     } else {
-      ElMessage.error('获取物料或供应商信息失败');
+      ElMessage.error('获取物料、供应商或仓库信息失败');
     }
   } catch (error) {
-    ElMessage.error('获取物料或供应商信息失败');
+    ElMessage.error('获取物料、供应商或仓库信息失败');
   }
 };
 
@@ -205,6 +238,18 @@ const getSupplierName = (supplierId) => {
   return supplier ? supplier.name : '未知供应商';
 };
 
+// 获取仓库位置
+const getWarehouseLocation = (warehouseId) => {
+  const warehouse = warehouses.value.find(wh => wh.id === warehouseId);
+  return warehouse ? warehouse.location : '未知位置';
+};
+
+// 格式化日期
+const formatDate = (date) => {
+  const d = new Date(date);
+  return d.toLocaleDateString(); // 或者使用更精确的格式化
+};
+
 // 处理分页大小变化
 const handleSizeChange = (size) => {
   pageSize.value = size;
@@ -224,8 +269,10 @@ const openAddSupplyDialog = () => {
     id: '',
     materialId: '',
     supplierId: '',
+    warehouseId: '',
     quantity: 0,
-    date: ''
+    cost: 0,
+    createTime: ''
   };
   dialogVisible.value = true;
 };
@@ -233,7 +280,7 @@ const openAddSupplyDialog = () => {
 // 打开编辑供应记录弹窗
 const openEditSupplyDialog = (row) => {
   isEditing.value = true;
-  supplyModel.value = { ...row };
+  supplyModel.value = { ...row, createTime: new Date(row.createTime).toISOString().split('T')[0] }; // 映射日期字段
   dialogVisible.value = true;
 };
 
@@ -242,11 +289,11 @@ const addSupply = async () => {
   try {
     const result = await addSupplyService(supplyModel.value);
     if (result.code === 200) {
-      ElMessage.success(result.message || '供应记录添加成功');
+      ElMessage.success(result.data.tip || '供应记录添加成功');
       dialogVisible.value = false;
       fetchSupplyData();
     } else {
-      ElMessage.error(result.message || '添加供应记录失败');
+      ElMessage.error(result.data.tip || '添加供应记录失败');
     }
   } catch (error) {
     ElMessage.error('发生错误，请稍后重试');
@@ -262,11 +309,11 @@ const updateSupply = async () => {
     }
     const result = await updateSupplyService(supplyModel.value.id, supplyModel.value);
     if (result.code === 200) {
-      ElMessage.success(result.message || '供应记录信息更新成功');
+      ElMessage.success(result.data.tip || '供应记录信息更新成功');
       dialogVisible.value = false;
       fetchSupplyData();
     } else {
-      ElMessage.error(result.message || '更新供应记录信息失败');
+      ElMessage.error(result.data.tip || '更新供应记录信息失败');
     }
   } catch (error) {
     ElMessage.error('发生错误，请稍后重试');
@@ -278,10 +325,10 @@ const deleteSupply = async (id) => {
   try {
     const result = await deleteSupplyService(id);
     if (result.code === 200) {
-      ElMessage.success(result.message || '成功删除供应记录');
+      ElMessage.success(result.data.tip || '成功删除供应记录');
       fetchSupplyData();
     } else {
-      ElMessage.error(result.message || '删除供应记录失败');
+      ElMessage.error(result.data.tip || '删除供应记录失败');
     }
   } catch (error) {
     ElMessage.error('发生错误，请稍后重试');
@@ -294,7 +341,7 @@ watch([selectedMaterial, selectedSupplier], fetchSupplyData);
 // 初始化加载数据
 onMounted(() => {
   fetchSupplyData();
-  fetchMaterialsAndSuppliers();
+  fetchMaterialsAndSuppliersAndWarehouses();
 });
 </script>
 

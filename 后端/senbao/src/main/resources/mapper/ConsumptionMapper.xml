@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senbao.mapper.ConsumptionMapper">
+
+    <resultMap id="BaseResultMap" type="com.senbao.pojo.Consumption">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="orderId" column="orderId" jdbcType="INTEGER"/>
+            <result property="warehouseId" column="warehouseId" jdbcType="INTEGER"/>
+            <result property="materialId" column="materialId" jdbcType="INTEGER"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,orderId,materialId,
+        quantity,create_time
+    </sql>
+
+    <insert id="insertConsumption" parameterType="com.senbao.pojo.Consumption">
+        INSERT INTO consumption  ( orderId, warehouseId, materialId, quantity, create_time )
+        VALUES  ( #{consumption.orderId}, #{consumption.warehouseId}, #{consumption.materialId}, #{consumption.quantity}, #{consumption.createTime})
+    </insert>
+
+    <update id="updateConsumptionById" parameterType="map">
+        UPDATE `consumption`
+        SET
+            orderId = #{consumption.orderId},
+            warehouseId = #{consumption.warehouseId},
+            materialId = #{consumption.materialId},
+            quantity = #{consumption.quantity},
+            create_time = #{consumption.createTime}
+        WHERE id = #{id}
+    </update>
+</mapper>

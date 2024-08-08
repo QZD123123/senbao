@@ -25,6 +25,8 @@ public interface SupplierMapper extends BaseMapper<Supplier> {
     int UpdateSupplierById(@Param("id") Integer id,@Param("supplier") Supplier supplier);
 
     int deleteSupplierById(@Param("id") Integer id);
+
+    List<Supplier> getAll();
 }
 
 

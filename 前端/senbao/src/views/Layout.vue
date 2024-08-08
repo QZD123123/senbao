@@ -1,51 +1,55 @@
 <script setup>
 import {
     Management,
-    Promotion,
-    UserFilled,
     User,
     Crop,
     EditPen,
     SwitchButton,
     CaretBottom
 } from '@element-plus/icons-vue'
-import avatar from '@/assets/default.png'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { useTokenStore } from '@/stores/token.js'
 import { useUserStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+
+const router = useRouter();
+const tokenStore = useTokenStore();
+const userStore = useUserStore();
+
+// 获取用户名，提供默认值以避免 undefined 错误
+const username = computed(() => userStore.userInfo?.username || '默认用户');
+
+// 获取用户头像
+const avatarUrl = computed(() => userStore.userInfo?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png');
 
 // 处理下拉菜单的命令
 const handleCommand = (command) => {
     switch (command) {
         case 'info':
-            router.push('/user/info')
-            break
+            router.push('/user/info');
+            break;
         case 'avatar':
-            router.push('/user/avatar')
-            break
+            router.push('/user/avatar');
+            break;
         case 'resetPassword':
-            router.push('/user/resetPassword')
-            break
+            router.push('/user/resetPassword');
+            break;
         case 'logout':
-            logout()
-            break
+            logout();
+            break;
         default:
-            break
+            break;
     }
-}
+};
 
-const router = useRouter();
-const tokenStore = useTokenStore();
-const userStore = useUserStore();
 // 退出登录函数
 const logout = () => {
     // 清除存储的 token
-    tokenStore.removeToken() // 或者使用 tokenStore.setToken('') 
-    userStore.logout();
+    tokenStore.removeToken(); // 或者使用 tokenStore.setToken('') 
+    userStore.logout(); // 更新用户状态
     // 跳转到登录页面
-    router.push('/login')
-}
+    router.push('/login');
+};
 </script>
 
 <template>
@@ -112,14 +116,11 @@ const logout = () => {
         <el-container style="width: 100%; height: 100%; overflow-x: hidden; overflow-y: auto;">
             <el-space direction="vertical" alignment="stretch" :size="small">
                 <!-- 头部区域 -->
-                <el-header >
-                    <div style="">管理员：卡卡酱 </div>
-                    <!-- <div>牛马程序员：<strong>{{userInfoStore.info.nickname}}</strong></div> -->
-                    <!-- command:条目被点击后会触发，在事件函数上可以声明一个参数，接收条目对应的指令 -->
+                <el-header>
+                    <div>管理员：{{ username }} </div>
                     <el-dropdown placement="bottom-end" @command="handleCommand">
                         <span class="el-dropdown__box">
-                            <!-- <el-avatar :src="userInfoStore.info.userPic?userInfoStore.info.userPic:avatar" /> -->
-                            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+                            <el-avatar :src="avatarUrl" />
                             <el-icon>
                                 <CaretBottom />
                             </el-icon>
@@ -137,9 +138,6 @@ const logout = () => {
             </el-space>
             <!-- 中间区域 -->
             <el-main style="width: 100%; height: 100%;">
-                <!-- <div style="width: 1290px; height: 570px;border: 1px solid red;">
-                    内容展示区
-                </div> -->
                 <router-view></router-view>
             </el-main>
             <!-- 底部区域 -->
@@ -193,7 +191,7 @@ const logout = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
+        font-size: 20px;
         color: #666;
     }
 }

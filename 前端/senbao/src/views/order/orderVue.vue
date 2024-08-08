@@ -28,7 +28,11 @@
             <el-table-column prop="address" label="地址" width="150" />
             <el-table-column prop="phone" label="电话" width="120" />
             <el-table-column prop="totalPrice" label="总价" width="120" />
-            <el-table-column prop="createTime" label="订单日期" width="300" />
+            <el-table-column prop="createTime" label="订单日期" width="300">
+                <template #default="{ row }">
+                    {{ formatDateTime(row.createTime) }}
+                </template>
+            </el-table-column>
             <el-table-column prop="progress" label="工作进度" width="150">
                 <template #default="{ row }">
                     <el-tag :type="getProgressTagType(row.progress)" disable-transitions>
@@ -60,7 +64,12 @@
                     <el-input v-model="orderModel.totalPrice" type="number" min="0"></el-input>
                 </el-form-item>
                 <el-form-item label="订单日期" prop="createTime">
-                    <el-date-picker v-model="orderModel.createTime" type="date" format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker 
+                        v-model="orderModel.createTime" 
+                        type="datetime" 
+                        format="yyyy-MM-dd HH:mm" 
+                        placeholder="选择订单日期和时间">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label="工作进度" prop="progress">
                     <el-select v-model="orderModel.progress" placeholder="选择进度">
@@ -273,6 +282,13 @@ watch(selectedProgress, fetchOrderData);
 onMounted(() => {
     fetchOrderData();
 });
+
+// 格式化日期时间
+const formatDateTime = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().slice(0, 19).replace('T', ' '); // 格式化为 YYYY-MM-DD HH:mm:ss
+};
 </script>
 
 <style scoped>

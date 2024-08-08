@@ -38,6 +38,11 @@ public class SupplierController {
         return result;
     }
 
+    @GetMapping("getall")
+    public Result getAll(){
+        Result result = supplierService.getAll();
+        return result;
+    }
 
 
 }

@@ -43,4 +43,8 @@
             LIMIT #{offset}, #{pageSize};
     </select>
 
+    <select id="getAll" resultType="com.senbao.pojo.Supplier">
+        select * from `supplier`
+    </select>
+
 </mapper>

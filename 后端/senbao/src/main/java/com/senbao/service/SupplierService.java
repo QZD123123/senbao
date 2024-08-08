@@ -18,4 +18,6 @@ public interface SupplierService extends IService<Supplier> {
     Result UpdateSupplierById(Integer id, Supplier supplier);
 
     Result deleteSupplierById(Integer id);
+
+    Result getAll();
 }
