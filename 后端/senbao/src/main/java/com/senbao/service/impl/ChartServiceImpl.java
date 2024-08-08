@@ -52,7 +52,7 @@ public class ChartServiceImpl implements ChartService {
         String sales = orderMapper.TotalOrderPriceOfYear();
         String orders = orderMapper.CountOrderOfYear();
         String customers = orderMapper.CountCustomer();
-        String suppliers = supplierMapper.CountSupplier();
+        long suppliers = supplierMapper.selectSupplierCount();
 
         Map data = new LinkedHashMap();
         data.put("sales",sales);

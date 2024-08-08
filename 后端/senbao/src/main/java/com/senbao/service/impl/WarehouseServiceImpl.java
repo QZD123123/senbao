@@ -66,7 +66,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
                 data.put("tip","仓库添加成功");
                 return Result.ok(data);
             }else{
-                data.put("tip","仓库订单失败");
+                data.put("tip","添加仓库失败");
                 return Result.build(data, ResultCodeEnum.requested_resource_no_modified);
             }
         }catch (Exception e){

@@ -123,7 +123,7 @@
         materials.value = result.data.materialList || [];
         totalCount.value = result.data.materialTotal || 0; // 更新总条数
       } else {
-        ElMessage.error(result.message || '获取物料信息失败');
+        ElMessage.error(result.data.tip || '获取物料信息失败');
       }
     } catch (error) {
       ElMessage.error('获取物料信息失败');
@@ -186,7 +186,7 @@
         dialogVisible.value = false;
         fetchMaterials();
       } else {
-        ElMessage.error(result.message || '添加物料失败');
+        ElMessage.error(result.data.tip || '添加物料失败');
       }
     } catch (error) {
       ElMessage.error('发生错误，请稍后重试');
@@ -206,7 +206,7 @@
         dialogVisible.value = false;
         fetchMaterials();
       } else {
-        ElMessage.error(result.message || '更新物料信息失败');
+        ElMessage.error(result.data.tip || '更新物料信息失败');
       }
     } catch (error) {
       ElMessage.error('发生错误，请稍后重试');
@@ -221,7 +221,7 @@
         ElMessage.success(result.data.tip || '成功删除物料');
         fetchMaterials();
       } else {
-        ElMessage.error(result.message || '删除物料失败');
+        ElMessage.error(result.data.tip || '删除物料失败');
       }
     } catch (error) {
       ElMessage.error('发生错误，请稍后重试');

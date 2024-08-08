@@ -16,12 +16,31 @@
         company
     </sql>
 
-    <select id="CountSupplier" resultType="java.lang.String">
-        SELECT
-            COUNT(*) AS supplier_count
-        FROM
-            `supplier`;
+    <insert id="insertSupplier" parameterType="com.senbao.pojo.Supplier" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `supplier` ( name, phone, company )
+        values ( #{TableSupplier.name}, #{TableSupplier.phone}, #{TableSupplier.company} )
+    </insert>
+
+    <update id="UpdateSupplierById">
+        UPDATE `supplier`
+        SET
+            name = #{supplier.name},
+            phone = #{supplier.phone},
+            company = #{supplier.company}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteSupplierById">
+        delete from `supplier` where id = #{id}
+    </delete>
+
+    <select id="selectSupplierCount" resultType="java.lang.Long">
+        select count(*) from supplier;
     </select>
 
+    <select id="selectSupplierPage" resultType="com.senbao.pojo.Supplier">
+        SELECT * from supplier
+            LIMIT #{offset}, #{pageSize};
+    </select>
 
 </mapper>

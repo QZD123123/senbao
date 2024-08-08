@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senbao.mapper.SupplyMapper">
+
+    <!-- 基本结果映射 -->
+    <resultMap id="BaseResultMap" type="com.senbao.pojo.Supply">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="supplierId" column="supplierId" jdbcType="INTEGER"/>
+        <result property="materialId" column="materialId" jdbcType="INTEGER"/>
+        <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+        <result property="warehouseId" column="warehouseId" jdbcType="INTEGER"/>
+        <result property="cost" column="cost" jdbcType="DECIMAL"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 公共列列表 -->
+    <sql id="Base_Column_List">
+        id, supplierId, materialId,
+        quantity, warehouseId, cost,
+        createTime
+    </sql>
+
+    <!-- 根据物料ID和供应商ID计算供应记录总数 -->
+    <select id="selectSupplyCountByMaterialAndSupplier" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM supply
+        WHERE materialId = #{materialId}
+          AND supplierId = #{supplierId}
+    </select>
+
+    <!-- 根据物料ID计算供应记录总数 -->
+    <select id="selectSupplyCountByMaterial" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM supply
+        WHERE materialId = #{materialId}
+    </select>
+
+    <!-- 根据供应商ID计算供应记录总数 -->
+    <select id="selectSupplyCountBySupplier" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM supply
+        WHERE supplierId = #{supplierId}
+    </select>
+
+    <!-- 计算所有供应记录总数 -->
+    <select id="selectSupplyCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM supply
+    </select>
+
+    <!-- 根据物料ID和供应商ID进行分页查询 -->
+    <select id="selectSupplyPageByMaterialAndSupplier" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM supply
+        WHERE materialId = #{materialId}
+        AND supplierId = #{supplierId}
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 根据物料ID进行分页查询 -->
+    <select id="selectSupplyPageByMaterial" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM supply
+        WHERE materialId = #{materialId}
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 根据供应商ID进行分页查询 -->
+    <select id="selectSupplyPageBySupplier" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM supply
+        WHERE supplierId = #{supplierId}
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 查询所有供应记录的分页数据 -->
+    <select id="selectSupplyPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM supply
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 根据ID更新供应记录 -->
+    <update id="updateSupplyById">
+        UPDATE supply
+        SET
+            supplierId = #{supply.supplierId},
+            materialId = #{supply.materialId},
+            quantity = #{supply.quantity},
+            warehouseId = #{supply.warehouseId},
+            cost = #{supply.cost},
+            createTime = #{supply.createTime}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
