@@ -20,6 +20,7 @@
                 <el-option label="油漆工" value="painter"></el-option>
                 <el-option label="五金工" value="ironman"></el-option>
                 <el-option label="杂工" value="user"></el-option>
+                <el-option label="仓库管理员" value="warehouseManager"></el-option>
             </el-select>
         </div>
         
@@ -62,6 +63,7 @@
                         <el-radio value="painter">油漆工</el-radio>
                         <el-radio value="ironman">五金工</el-radio>
                         <el-radio value="user">杂工</el-radio>
+                        <el-radio value="warehouseManager">仓库管理员</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="薪水" prop="salary">
@@ -249,6 +251,7 @@ const roleFormatter = (row, column, cellValue, index) => {
         'painter': '油漆工',
         'ironman': '五金工',
         'user': '杂工',
+        'warehouseManager': '仓库管理员',
     };
     return roleMap[cellValue] || cellValue;
 };

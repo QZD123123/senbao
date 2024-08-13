@@ -83,7 +83,7 @@
 
     <!-- 添加/编辑供应记录弹窗 -->
     <el-dialog v-model="dialogVisible" :title="isEditing ? '编辑供应记录' : '添加供应记录'" width="50%">
-      <el-form :model="supplyModel" :rules="rules" label-width="120px" style="padding-right: 30px">
+      <el-form :model="supplyModel" :rules="rules" label-width="120px" style="padding-right: 30px" ref="formRef">
         <el-form-item label="物料" prop="materialId">
           <el-select v-model="supplyModel.materialId">
             <el-option
@@ -176,6 +176,9 @@ const supplyModel = ref({
   cost: 0,
   createTime: ''
 });
+
+// 表单引用
+const formRef = ref(null);
 
 // 验证规则
 const rules = {
@@ -287,6 +290,12 @@ const openEditSupplyDialog = (row) => {
 // 添加供应记录
 const addSupply = async () => {
   try {
+    // 进行表单验证
+    const isValid = await formRef.value.validate();
+    if (!isValid) {
+      return; // 如果表单无效，则阻止进一步执行
+    }
+
     const result = await addSupplyService(supplyModel.value);
     if (result.code === 200) {
       ElMessage.success(result.data.tip || '供应记录添加成功');
@@ -303,6 +312,12 @@ const addSupply = async () => {
 // 更新供应记录
 const updateSupply = async () => {
   try {
+    // 进行表单验证
+    const isValid = await formRef.value.validate();
+    if (!isValid) {
+      return; // 如果表单无效，则阻止进一步执行
+    }
+
     if (!supplyModel.value.id) {
       ElMessage.error('供应记录ID丢失，无法更新');
       return;

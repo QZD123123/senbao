@@ -12,18 +12,18 @@
         <result property="quantity" column="quantity" jdbcType="INTEGER"/>
         <result property="warehouseId" column="warehouseId" jdbcType="INTEGER"/>
         <result property="cost" column="cost" jdbcType="DECIMAL"/>
-        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!-- 公共列列表 -->
     <sql id="Base_Column_List">
         id, supplierId, materialId,
         quantity, warehouseId, cost,
-        createTime
+        create_time
     </sql>
 
     <insert id="addSupply">
-        INSERT INTO supply (supplierId,materialId,quantity,warehouseId,cost,createtime)
+        INSERT INTO supply (supplierId,materialId,quantity,warehouseId,cost,create_time)
         VALUES (#{supply.supplierId},#{supply.materialId},#{supply.quantity},#{supply.warehouseId},#{supply.cost},#{supply.createTime})
     </insert>
 
@@ -100,7 +100,7 @@
             quantity = #{supply.quantity},
             warehouseId = #{supply.warehouseId},
             cost = #{supply.cost},
-            createTime = #{supply.createTime}
+            create_time = #{supply.createTime}
         WHERE id = #{id}
     </update>
 

@@ -41,7 +41,7 @@
     </select>
 
     <select id="selectWarehouseManager" resultType="com.senbao.response.warehouseManagerRSP">
-        SELECT `user`.id,user.username FROM `warehouse`,`user` WHERE warehouse.managerId=`user`.id
+        SELECT `user`.id,user.username FROM `user` WHERE`user`.role = 'warehouseManager'
     </select>
 
     <select id="getAll" resultType="com.senbao.pojo.Warehouse">
